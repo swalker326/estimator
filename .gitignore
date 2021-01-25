@@ -21,3 +21,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#amplify
+build/
+dist/
+node_modules/
+aws-exports.js
+awsconfiguration.json
+.secret-*
+.env
