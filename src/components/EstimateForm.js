@@ -1,27 +1,33 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import Fab from '@material-ui/core/Fab';
 import firebase from "firebase";
 // eslint-disable-next-line no-unused-vars
 import firestore from '../server/firestore';
-import { Grid, TextField} from '@material-ui/core';
+import { getMakes, getModels } from '../server/carData';
+import { Grid, TextField, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PhotoCameraRoundedIcon from "@material-ui/icons/PhotoCameraRounded";
 import DriveEtaRoundedIcon from '@material-ui/icons/DriveEtaRounded';
 import PermContactCalendarRoundedIcon from '@material-ui/icons/PermContactCalendarRounded';
 import VehiclePhotos from './VehiclePhotos';
 
+import Years from '../years.json'
+
 const EstimateForm = () => {
   const classes = useStyles();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [photos, setPhotos] = useState([
-    {
-      name: 'photo1',
-      img: 'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8Y2Fyc3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
-    },
-  ]);
-
+  
+  const [carYear, setCarYear] = useState(undefined);
+  const [carMake, setCarMake] = useState(undefined);
+  const [carModel, setCarModel] = useState(undefined);
+  
+  
+  const [makeOptions, setMakeOptions] = useState([]);
+  const [modelOptions, setModelOptions] = useState([]);
+  
+  const [photos, setPhotos] = useState([]);
   const updatePhotos = (photo) => {
     const newImg = { name: Date.now(), img: URL.createObjectURL(photo) }
     setPhotos([...photos, newImg]);
@@ -39,11 +45,22 @@ const EstimateForm = () => {
       first_name: firstName,
       last_name: lastName,
       email,
-      images: photos
+      images: photos,
+      carYear,
+      carMake,
+      carModel,
     });
   };
-
-  // const [displayCamera, setDisplayCamera] = useState(false);
+  const handleYearChange = (year) => {
+    setCarYear(parseInt(year));
+    getMakes().then((makes) => setMakeOptions([...makes])); // eslint-disable-line)
+  }
+  const handleMakechange = (make) => {
+    setCarMake(make);
+    getModels(carYear,make).then((models) => {
+      setModelOptions([...models])
+    })
+  }
 
   return (
     <div className={classes.root} >
@@ -63,9 +80,15 @@ const EstimateForm = () => {
               <DriveEtaRoundedIcon fontSize="large" color="primary" />
               <h3>Vehicle Info</h3>
             </div>
-            <TextField className={classes.textField} id="outlined-basic" label="Make" variant="outlined" />
-            <TextField className={classes.textField} id="outlined-basic" label="Model" variant="outlined" />
-            <TextField className={classes.textField} id="outlined-basic" label="Color" variant="outlined" />
+            <TextField select onChange={(e) => handleYearChange(e.target.value)} helperText='Select Vehicle Year' className={classes.textField} id="outlined-basic" label="Year" variant="outlined">
+              {Years.years.map((option, index) => <MenuItem style={{ maxHeight: "20px" }} key={index} value={option}>{option}</MenuItem>)}
+            </TextField>
+            <TextField select onChange ={(e) => handleMakechange(e.target.value)} helperText='Select Vehicle Make' className={classes.textField} id="outlined-basic" label="Make" variant="outlined">
+              {makeOptions.map((make, index) => <MenuItem style={{ maxHeight: "20px" }} key={index} value={make}>{make}</MenuItem>)}
+            </TextField>
+            <TextField select onChange ={(e) => setCarModel(e.target.value)} helperText='Select Vehicle Model' className={classes.textField} id="outlined-basic" label="Model" variant="outlined">
+              {modelOptions.map((make, index) => <MenuItem style={{ maxHeight: "20px" }} key={index} value={make}>{make}</MenuItem>)}
+            </TextField>
           </Grid>
           <Grid xs={3} item>
             <div className={classes.headerRow}>
@@ -98,7 +121,7 @@ const useStyles = makeStyles((theme) => ({
   },
   vehiclePhotos: {
     // margin: '0 3rem',
-    display:'flex',
+    display: 'flex',
     width: '100%',
     justifyContent: 'center',
   },
