@@ -30,3 +30,4 @@ aws-exports.js
 awsconfiguration.json
 .secret-*
 .env
+.eslintcache
