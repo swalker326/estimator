@@ -90,8 +90,7 @@ export const Camera = ({ onCapture, onClear }) => {
     onClear();
   }
   const handleSave = () => {
-    ImageUpload(tempPhoto);
-    onCapture(tempPhoto);
+    ImageUpload(tempPhoto).then((data) => onCapture(data)) // eslint-disable-line);
     setIsCanvasEmpty(true);
     handleClear();
   }

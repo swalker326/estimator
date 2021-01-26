@@ -29,7 +29,7 @@ const EstimateForm = () => {
   
   const [photos, setPhotos] = useState([]);
   const updatePhotos = (photo) => {
-    const newImg = { name: Date.now(), img: URL.createObjectURL(photo) }
+    const newImg = { name: Date.now(), img: photo }
     setPhotos([...photos, newImg]);
     console.log("photos", photos); // eslint-disable-line
   }
@@ -83,10 +83,10 @@ const EstimateForm = () => {
             <TextField select onChange={(e) => handleYearChange(e.target.value)} helperText='Select Vehicle Year' className={classes.textField} id="outlined-basic" label="Year" variant="outlined">
               {Years.years.map((option, index) => <MenuItem style={{ maxHeight: "20px" }} key={index} value={option}>{option}</MenuItem>)}
             </TextField>
-            <TextField select onChange ={(e) => handleMakechange(e.target.value)} helperText='Select Vehicle Make' className={classes.textField} id="outlined-basic" label="Make" variant="outlined">
+            <TextField select disabled={makeOptions.length > 1 ? false : true} onChange ={(e) => handleMakechange(e.target.value)} helperText='Select Vehicle Make' className={classes.textField} id="outlined-basic" label="Make" variant="outlined">
               {makeOptions.map((make, index) => <MenuItem style={{ maxHeight: "20px" }} key={index} value={make}>{make}</MenuItem>)}
             </TextField>
-            <TextField select onChange ={(e) => setCarModel(e.target.value)} helperText='Select Vehicle Model' className={classes.textField} id="outlined-basic" label="Model" variant="outlined">
+            <TextField select disabled={modelOptions.length > 1 ? false : true} onChange ={(e) => setCarModel(e.target.value)} helperText='Select Vehicle Model' className={classes.textField} id="outlined-basic" label="Model" variant="outlined">
               {modelOptions.map((make, index) => <MenuItem style={{ maxHeight: "20px" }} key={index} value={make}>{make}</MenuItem>)}
             </TextField>
           </Grid>

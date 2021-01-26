@@ -26,15 +26,5 @@ export const getModels = async (year, make) => {
     console.log("results", results); // eslint-disable-line
     const models = [...new Set(results.map(item => item.attributes.Model))];
     return Array.from(models);
-    // You can use the "get" method to get the value of an attribute
-    // Ex: response.get("<ATTRIBUTE_NAME>")
-    // if (typeof document !== 'undefined') {
-    //   // document.write(`Car_Model_List found: ${JSON.stringify(results)}`);
-    //   console.log('Car_Model_List found', results);
-    //   results.map((car) => {
-    //     console.log("Make: ", car.attributes.Make); // eslint-disable-line
-    //     console.log("Model: ", car.attributes.Model); // eslint-disable-line
-    //   })
-    // }
   });
 }
