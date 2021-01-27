@@ -25,7 +25,7 @@ const Button = ({ openModal }) => {
 
   return (
     <div ref={btnRef} onClick={handleClick}>
-      <AddAPhotoRoundedIcon fontSize="large" color="primary" />
+      <AddAPhotoRoundedIcon fontSize="large" />
     </div>
   );
 };

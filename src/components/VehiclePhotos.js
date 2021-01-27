@@ -19,11 +19,12 @@ const VehiclePhotos = (props) => {
 
   const classes = useStyles();
   return (
-    <Box display='flex' borderColor='primary' className={classes.root} >
+    <Box display='flex' borderColor='black' className={classes.root} >
       <GridList cellHeight={160} className={classes.gridList} cols={6}>
         <GridListTile key='add icon' className={classes.gridListTile} cols={2}>
           <div className={classes.addIconContainer}>
             <CameraModal onCapture={updatePhotos} />
+            <span>Add Photos</span>
           </div>
         </GridListTile>
         {photos.map((photo, index) => (
@@ -55,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
   addIconContainer: {
     height: '100%',
     display:'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -65,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     top: '2%',
     textAlign: 'center',
     textEmphasis: 'bold',
-    color: 'primary',
+    color: 'black',
     position: 'absolute',
     backgroundColor: '#fff',
     padding: '8px',
