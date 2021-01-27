@@ -31,5 +31,6 @@ awsconfiguration.json
 .secret-*
 .env
 .eslintcache
+.firebase/hosting.YnVpbGQ.cache
 
 *.cache
