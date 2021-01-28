@@ -10,7 +10,6 @@ const VehiclePhotos = (props) => {
   const updatePhotos = props.onCapture;
   const setPhotos = props.onChange;
   const photos = props.photos; 
-  console.log("vehicle photos", photos); // eslint-disable-line
 
   const removePhoto = (photoName) => {
     const photosArray = photos.filter((photo) => photoName !== photo.name);
