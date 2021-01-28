@@ -9,7 +9,7 @@ const Submitted = () => {
     <div className='Submitted' style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }} >
       <div>
         <h2>We're On it!</h2>
-        <CheckCircleOutlineOutlinedIcon style={{ fontSize: '70px' }} color="black" />
+        <CheckCircleOutlineOutlinedIcon style={{ fontSize: '70px', color:'black' }}/>
         <p style={{ padding: '0 2rem' }}>Your request has been submitted. We will reach out to you once we have an Estimate put together.</p>
         <div style={{marginTop: '65%'}}>
           <Fab color="primary" size="large" href='http://localhost:3000' variant="extended" aria-label="add">
