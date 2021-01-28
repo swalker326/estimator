@@ -2,6 +2,7 @@ import firebase from 'firebase/app' // doing import firebase from 'firebase' or 
 import 'firebase/auth'
 import 'firebase/database'
 import 'firebase/firestore';
+import 'firebase/storage'; 
 import Axios from 'axios'
 
 // Initialize Firebase
@@ -19,4 +20,4 @@ firebase.initializeApp(config)
 var db = firebase.firestore()
 var storage = firebase.storage()
 
-// export { Axios, db, storage }
+export { Axios, db, storage }
