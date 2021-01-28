@@ -23,7 +23,6 @@ export const getModels = async (year, make) => {
   /* query.equalTo("Model", 'A string'); */
   /* query.equalTo("Category", 'A string'); */
   return query.find().then((results) => {
-    console.log("results", results); // eslint-disable-line
     const models = [...new Set(results.map(item => item.attributes.Model))];
     return Array.from(models);
   });
