@@ -46,8 +46,8 @@ exports.sendMessage = functions.https.onRequest((req, res) => {
     <li>Email: ${req.body.emailAddress}</li>
   </ul>
 
+  <h4>Photos</h4>
   <ul>
-    <h4>Photos</h4>
           ${req.body.photos.map((photo) =>
     `<li><a href='${photo.img}'>Photo</a></li>`
   ).join("")}

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Camera } from './Camera';
+import ProCamera from './ProCamera';
 import { useModal, Modal } from 'react-morphing-modal';
 import AddAPhotoRoundedIcon from '@material-ui/icons/AddAPhotoRounded';
 import 'react-morphing-modal/dist/ReactMorphingModal.css';
@@ -11,7 +11,7 @@ const CameraModal = (props) => {
     <div>
       <Button openModal={open} />
       <Modal {...modalProps} padding={false} >
-        <Camera onClear={(photo) => { console.log('TODO') }} onCapture={onCapture} />
+        <ProCamera onCapture={onCapture} />
       </Modal>
     </div>
   );
