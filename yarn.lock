@@ -2506,6 +2506,11 @@
     "@types/webpack-sources" "*"
     source-map "^0.6.0"
 
+"@types/webrtc@0.0.25":
+  version "0.0.25"
+  resolved "https://registry.yarnpkg.com/@types/webrtc/-/webrtc-0.0.25.tgz#bd2b4e7b4c13250b3d58439623f2b9adfd7dee9e"
+  integrity sha512-ep/e+p2uUKV1h96GBgRhwomrBch/bPDHPOKbCHODLGRUDuuKe2s7sErlFVKw+5BYUzvpxSmUNqoadaZ44MePoQ==
+
 "@types/yargs-parser@*":
   version "15.0.0"
   resolved "https://registry.yarnpkg.com/@types/yargs-parser/-/yargs-parser-15.0.0.tgz#cb3f9f741869e20cce330ffbeb9271590483882d"
@@ -4939,6 +4944,11 @@ detect-port-alt@1.1.6:
   dependencies:
     address "^1.0.1"
     debug "^2.6.0"
+
+detectrtc@^1.3.9:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/detectrtc/-/detectrtc-1.4.1.tgz#05ed7df92597b265dad5b226f8d31f670deb0cd1"
+  integrity sha512-lxvyNN6/dSnwoVj1VstVFHel7S0BTmkfv1+01IBEy42D20pue27eB/MfphUOQz78jJ7WcQJDo6ZybhgBlUDi0Q==
 
 diff-sequences@^26.6.2:
   version "26.6.2"
@@ -10517,6 +10527,13 @@ react-aws-s3@^1.3.0:
   dependencies:
     crypto-js "^3.1.9-1"
     short-uuid "^3.1.0"
+
+react-camera-pro@swalker326/react-camera-pro:
+  version "1.1.0"
+  resolved "https://codeload.github.com/swalker326/react-camera-pro/tar.gz/f9d3abaacb224e807f0362631554000db529a480"
+  dependencies:
+    "@types/webrtc" "0.0.25"
+    detectrtc "^1.3.9"
 
 react-dev-utils@^11.0.1:
   version "11.0.1"
