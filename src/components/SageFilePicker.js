@@ -39,7 +39,7 @@ const SageFilePicker = (props) => {
   const saveImages = async (images) => {
     loading(true);
     const blobImages = await images.map((i) => b64toBlob(i));
-    return await Promise.all(blobImages.map((blob) => ImageUpload(blob)));
+    return Promise.all(blobImages.map((blob) => ImageUpload(blob)))
   };
   const handleAddToQuote = () => {
     saveImages(dataUrls).then((data) => addSelectedImages(data));
