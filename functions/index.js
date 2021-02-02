@@ -49,7 +49,7 @@ exports.sendMessage = functions.https.onRequest((req, res) => {
   <h4>Photos</h4>
   <ul>
           ${req.body.photos.map((photo) =>
-    `<li><a href='${photo.img}'>Photo</a></li>`
+    `<li><a href='${photo}'>Photo</a></li>`
   ).join("")}
   </ul>
 </div>` // eslint-disable-line
