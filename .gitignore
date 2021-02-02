@@ -32,5 +32,6 @@ awsconfiguration.json
 .env
 .eslintcache
 .firebase/hosting.YnVpbGQ.cache
+firebase-debug.log
 
 *.cache

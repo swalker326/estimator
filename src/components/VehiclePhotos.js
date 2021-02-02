@@ -6,14 +6,13 @@ import GridListTile from '@material-ui/core/GridListTile';
 import CameraModal from './CameraModal';
 
 const VehiclePhotos = (props) => {
-  // const { photos } = props;
   const updatePhotos = props.onCapture;
-  const setPhotos = props.onChange;
+  const setPhotos = props.onPhotoChange;
   const photos = props.photos; 
 
   const removePhoto = (photoName) => {
-    const photosArray = photos.filter((photo) => photoName !== photo.name);
-    setPhotos(photosArray);
+    // const photosArray = photos.filter((photo) => photoName !== photo);
+    setPhotos(photos.filter((photo) => photoName !== photo));
   }
 
   const classes = useStyles();
@@ -22,14 +21,14 @@ const VehiclePhotos = (props) => {
       <GridList cellHeight={160} className={classes.gridList} cols={6}>
         <GridListTile key='add icon' className={classes.gridListTile} cols={2}>
           <div className={classes.addIconContainer}>
-            <CameraModal onCapture={updatePhotos} />
+            <CameraModal loading={props.loading} onCapture={updatePhotos} />
             <span>Add Photos</span>
           </div>
         </GridListTile>
         {photos.map((photo, index) => (
-          <GridListTile key={photo.name} className={classes.gridListTile} cols={2}>
-            <span onClick={() => removePhoto(photo.name)} className={classes.closeButton}>X</span>
-            <img src={photo.img} alt={`damageImage-${index}`} />
+          <GridListTile key={`damagePhoto_${index}`} className={classes.gridListTile} cols={2}>
+            <span onClick={() => removePhoto(photo)} className={classes.closeButton}>X</span>
+            <img src={photo} alt={`damageImage_${index}`} />
           </GridListTile>
         ))}
       </GridList>
