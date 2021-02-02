@@ -1,19 +1,26 @@
-import React, { useState, useEffect} from "react";
-import Fab from "@material-ui/core/Fab";
-import Backdrop from "@material-ui/core/Backdrop";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import firebase from "firebase";
+import React, { useState, useEffect } from "react";
+// import Fab from "@material-ui/core/Fab";
 import { Axios, db } from "../server/firestore";
 import Submitted from "./Submitted";
 import { getMakes, getModels } from "../server/carData";
-import { Grid, TextField, MenuItem } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  Grid,
+  TextField,
+  MenuItem,
+  CircularProgress,
+  Backdrop,
+  makeStyles,
+  Fab
+} from "@material-ui/core";
+import Years from "../years.json";
+
+// Icons
 import PhotoCameraRoundedIcon from "@material-ui/icons/PhotoCameraRounded";
 import DriveEtaRoundedIcon from "@material-ui/icons/DriveEtaRounded";
 import PermContactCalendarRoundedIcon from "@material-ui/icons/PermContactCalendarRounded";
-import VehiclePhotos from "./VehiclePhotos";
 
-import Years from "../years.json";
+//Local Imports
+import VehiclePhotos from "./VehiclePhotos";
 
 const EstimateForm = () => {
   const classes = useStyles();
@@ -45,15 +52,17 @@ const EstimateForm = () => {
   useEffect(() => {
     setFormData({
       ...formData,
-      photos: [...photos]})
-  },[photos]);
+      photos: [...photos],
+    });
+  }, [photos]);
 
   const updatePhotos = (newPhotos) => {
     setPhotos((photos) => {
       setFormData({
         ...formData,
-        photos: [...photos,...newPhotos]})
-      return [...photos,...newPhotos]
+        photos: [...photos, ...newPhotos],
+      });
+      return [...photos, ...newPhotos];
     });
     setTimeout(() => setLoading(false), 1000);
   };
