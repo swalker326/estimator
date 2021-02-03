@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import Fab from "@material-ui/core/Fab";
 import { Axios, db } from "../server/firestore";
 import Submitted from "./Submitted";
 import { getMakes, getModels } from "../server/carData";
@@ -10,7 +9,7 @@ import {
   CircularProgress,
   Backdrop,
   makeStyles,
-  Fab
+  Fab,
 } from "@material-ui/core";
 import Years from "../years.json";
 
@@ -24,29 +23,16 @@ import VehiclePhotos from "./VehiclePhotos";
 
 const EstimateForm = () => {
   const classes = useStyles();
+
+  const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const [firstName, setFirstName] = useState("");
-  const [firstNameError, setFirstNameError] = useState(false);
-
-  const [lastName, setLastName] = useState("");
-  const [lastNameError, setLastNameError] = useState(false);
-
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState(false);
-
   const [displayForm, setDisplayForm] = useState(true);
-
-  const [formErrors, setFormErrors] = useState([]);
   const [formData, setFormData] = useState({});
-
   const [carYear, setCarYear] = useState("");
   const [carMake, setCarMake] = useState("");
   const [carModel, setCarModel] = useState("");
-
   const [makeOptions, setMakeOptions] = useState([]);
   const [modelOptions, setModelOptions] = useState([]);
-
   const [photos, setPhotos] = useState([]);
 
   useEffect(() => {
@@ -67,7 +53,7 @@ const EstimateForm = () => {
     setTimeout(() => setLoading(false), 1000);
   };
 
-  const updateInput = (e) => {
+  const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -80,76 +66,26 @@ const EstimateForm = () => {
     );
   };
   const addUser = (e) => {
-    setFormErrors([]);
     e.preventDefault();
-    validateForm().then((data) => {
-      sendEmail();
-      if (formErrors.length > 0) {
-        console.log("show Errors"); // eslint-disable-line
-      } else {
-        db.settings({
-          timestampsInSnapshots: true,
-        });
-        // eslint-disable-next-line no-unused-vars
-        const userRef = db
-          .collection("requested")
-          .add({
-            first_name: firstName,
-            last_name: lastName,
-            email,
-            images: photos,
-            carYear,
-            carMake,
-            carModel,
-          })
-          .finally(() => {
-            setDisplayForm(false);
-          });
-      }
+    sendEmail();
+    db.settings({
+      timestampsInSnapshots: true,
     });
-  };
-  const validateForm = async () => {
-    await validateNameField("First Name", firstName, setFirstNameError);
-    await validateNameField("Last Name", lastName, setLastNameError);
-    await validateEmail(email);
-    await validateDropdowns();
-  };
-  const validateNameField = async (fieldName, fieldValue, errorSetter) => {
-    if (fieldValue.trim() === "") {
-      setFormErrors(...formErrors, `${fieldName} is required`);
-      errorSetter(true);
-    }
-    if (/[^a-zA-Z -]/.test(fieldValue)) {
-      setFormErrors(...formErrors, `Invalid caracters in your ${fieldName}`);
-      errorSetter(true);
-    }
-    if (fieldValue.trim().length < 3) {
-      setFormErrors(
-        ...formErrors,
-        `${fieldName} needs to be at least three characters`
-      );
-      errorSetter(true);
-    } else errorSetter(false);
-  };
-  const validateEmail = async (emailAddress) => {
-    if (
-      /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-        emailAddress
-      )
-    )
-      setEmailError(false);
-    if (emailAddress.trim() === "" || !emailAddress) {
-      setFormErrors(...formErrors, `Email is required`);
-      setEmailError(true);
-    }
-    return "Please enter a valid email";
-  };
-  const validateDropdowns = async () => {
-    const dropdownErrors = [];
-    if (!carYear) dropdownErrors.push("Please fill out vehicle Year");
-    else if (!carMake) dropdownErrors.push("Please fill out vehicle Make");
-    else if (!carModel) dropdownErrors.push("Please fill out vehicle Model");
-    setFormErrors(...formErrors, dropdownErrors);
+    // eslint-disable-next-line no-unused-vars
+    const userRef = db
+      .collection("requested")
+      .add({
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.emailAddress,
+        images: photos,
+        carYear,
+        carMake,
+        carModel,
+      })
+      .finally(() => {
+        setDisplayForm(false);
+      });
   };
   const handleYearChange = (year) => {
     setCarYear(parseInt(year));
@@ -158,6 +94,16 @@ const EstimateForm = () => {
       setMakeOptions([...makes]);
       hideLoading();
     });
+  };
+  const validateField = (e) => {
+    const name = e.target.name;
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (e.target.value < 2) {
+      setErrors(errors => [...errors, name])
+    } else setErrors(errors.filter((errorName) => errorName !== name ))
+    if (name === 'emailAddress' && !emailRegex.test(e.target.value)) {
+      setErrors(errors => [...errors, name])
+    } else setErrors(errors.filter((errorName) => errorName !== name ))
   };
   const handleMakechange = (make) => {
     setCarMake(make);
@@ -194,37 +140,37 @@ const EstimateForm = () => {
                   <h3>Contact Info</h3>
                 </div>
                 <TextField
-                  name="FirstName"
-                  error={firstNameError ? true : false}
+                  name="firstName"
                   className={classes.textField}
                   id="outlined-basic"
+                  error={errors.includes('firstName')}
+                  onBlur={(e) => validateField(e)}
                   onChange={(e) => {
-                    updateInput(e);
-                    setFirstName(e.target.value);
+                    handleInputChange(e);
                   }}
                   label="First Name"
                   variant="outlined"
                 />
                 <TextField
-                  name="LastName"
-                  error={lastNameError ? true : false}
+                  name="lastName"
                   className={classes.textField}
                   id="outlined-basic"
+                  error={errors.includes('lastName')}
+                  onBlur={(e) => validateField(e)}
                   onChange={(e) => {
-                    updateInput(e);
-                    setLastName(e.target.value);
+                    handleInputChange(e);
                   }}
                   label="Last Name"
                   variant="outlined"
                 />
                 <TextField
                   name="emailAddress"
-                  error={emailError ? true : false}
                   className={classes.textField}
                   id="outlined-basic"
+                  error={errors.includes('emailAddress')}
+                  onBlur={(e) => validateField(e)}
                   onChange={(e) => {
-                    updateInput(e);
-                    setEmail(e.target.value);
+                    handleInputChange(e);
                   }}
                   label="Email"
                   variant="outlined"
@@ -239,8 +185,10 @@ const EstimateForm = () => {
                   value={carYear}
                   select
                   name="carYear"
+                  error={errors.includes('carYear')}
+                  onBlur={(e) => validateField(e)}
                   onChange={(e) => {
-                    updateInput(e);
+                    handleInputChange(e);
                     handleYearChange(e.target.value);
                   }}
                   helperText="Select Vehicle Year"
@@ -264,8 +212,10 @@ const EstimateForm = () => {
                   select
                   name="carMake"
                   disabled={makeOptions.length > 1 ? false : true}
+                  error={errors.includes('carMake')}
+                  onBlur={(e) => validateField(e)}
                   onChange={(e) => {
-                    updateInput(e);
+                    handleInputChange(e);
                     handleMakechange(e.target.value);
                   }}
                   helperText="Select Vehicle Make"
@@ -289,8 +239,10 @@ const EstimateForm = () => {
                   select
                   name="carModel"
                   disabled={modelOptions.length > 1 ? false : true}
+                  error={errors.includes('carModel')}
+                  onBlur={(e) => validateField(e)}
                   onChange={(e) => {
-                    updateInput(e);
+                    handleInputChange(e);
                     setCarModel(e.target.value);
                   }}
                   helperText="Select Vehicle Model"
