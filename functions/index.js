@@ -30,7 +30,7 @@ exports.sendMessage = functions.https.onRequest((req, res) => {
         from: req.body.emailAddress,
         replyTo: req.body.emailAddress,
         to: gmailEmail,
-        subject: `${req.body.FirstName} just requested a quote`,
+        subject: `${req.body.firstName} just requested a quote`,
         html: `
         <div>
   <h2>A new quote request!</h2>
@@ -42,17 +42,17 @@ exports.sendMessage = functions.https.onRequest((req, res) => {
   </ul>
   <h4>Customer Details</h4>
   <ul>
-    <li>${req.body.FirstName} ${req.body.LastName}</li>
+    <li>${req.body.firstName} ${req.body.lastName}</li>
     <li>Email: ${req.body.emailAddress}</li>
   </ul>
 
   <h4>Photos</h4>
   <ul>
-          ${req.body.photos.map((photo) =>
-    `<li><a href='${photo}'>Photo</a></li>`
-  ).join("")}
+          ${req.body.photos
+      .map((photo) => `<li><a href='${photo}'>Photo</a></li>`)
+      .join("")}
   </ul>
-</div>` // eslint-disable-line
+</div>`, // eslint-disable-line
       };
 
       return mailTransport.sendMail(mailOptions).then(() => {
