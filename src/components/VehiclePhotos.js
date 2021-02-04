@@ -1,77 +1,86 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core/';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import CameraModal from './CameraModal';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Box } from "@material-ui/core/";
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import CameraModal from "./CameraModal";
 
 const VehiclePhotos = (props) => {
   const updatePhotos = props.onCapture;
   const setPhotos = props.onPhotoChange;
-  const photos = props.photos; 
+  const photos = props.photos;
 
   const removePhoto = (photoName) => {
     // const photosArray = photos.filter((photo) => photoName !== photo);
     setPhotos(photos.filter((photo) => photoName !== photo));
-  }
+  };
 
   const classes = useStyles();
   return (
-    <Box display='flex' borderColor='black' className={classes.root} >
+    <Box display="flex" borderColor="black" className={classes.root}>
       <GridList cellHeight={160} className={classes.gridList} cols={6}>
-        <GridListTile key='add icon' className={classes.gridListTile} cols={2}>
+        <GridListTile key="add icon" className={classes.gridListTile} cols={2}>
           <div className={classes.addIconContainer}>
             <CameraModal loading={props.loading} onCapture={updatePhotos} />
             <span>Add Photos</span>
           </div>
         </GridListTile>
         {photos.map((photo, index) => (
-          <GridListTile key={`damagePhoto_${index}`} className={classes.gridListTile} cols={2}>
-            <span onClick={() => removePhoto(photo)} className={classes.closeButton}>X</span>
+          <GridListTile
+            key={`damagePhoto_${index}`}
+            className={classes.gridListTile}
+            cols={2}
+          >
+            <span
+              onClick={() => removePhoto(photo)}
+              className={classes.closeButton}
+            >
+              X
+            </span>
             <img src={photo} alt={`damageImage_${index}`} />
           </GridListTile>
         ))}
       </GridList>
     </Box>
-  )
-}
+  );
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    overflow: "hidden",
   },
   gridList: {
-    width: '90vw',
+    width: "90vw",
     height: 450,
   },
   gridListTile: {
-    borderRadius: '1rem',
-    objectFit: 'cover',
+    borderRadius: "1rem",
+    objectFit: "cover",
   },
   addIconContainer: {
-    height: '100%',
-    display:'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
   closeButton: {
     zIndex: 1,
-    margin: '3px',
-    left: '2%',
-    top: '2%',
-    textAlign: 'center',
-    textEmphasis: 'bold',
-    color: 'black',
-    position: 'absolute',
-    backgroundColor: '#fff',
-    padding: '8px',
-    borderRadius: '50%',
-    cursor: 'pointer',
-  }
+    margin: "3px",
+    left: "2%",
+    top: "2%",
+    textAlign: "center",
+    textEmphasis: "bold",
+    color: "black",
+    position: "absolute",
+    backgroundColor: "#fff",
+    padding: "8px",
+    borderRadius: "50%",
+    cursor: "pointer",
+  },
 }));
 
-export default VehiclePhotos
+export default VehiclePhotos;

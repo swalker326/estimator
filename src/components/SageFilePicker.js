@@ -15,7 +15,7 @@ const SageFilePicker = (props) => {
   const { addSelectedImages, closeModal, loading } = props;
   const [selectedImage, setSelectedImage] = useState(false);
   const [dataUrls, setDataUrls] = useState([]);
-  
+
   const {
     files,
     onClick: handleAddImages,
@@ -39,7 +39,7 @@ const SageFilePicker = (props) => {
   const saveImages = async (images) => {
     loading(true);
     const blobImages = await images.map((i) => b64toBlob(i));
-    return Promise.all(blobImages.map((blob) => ImageUpload(blob)))
+    return Promise.all(blobImages.map((blob) => ImageUpload(blob)));
   };
   const handleAddToQuote = () => {
     saveImages(dataUrls).then((data) => addSelectedImages(data));
@@ -49,7 +49,7 @@ const SageFilePicker = (props) => {
   useEffect(() => {
     const getDataUrls = async () => {
       const data = await Promise.all(files.map(utils.loadFile));
-      setDataUrls(dataUrls => dataUrls.concat(data));
+      setDataUrls((dataUrls) => dataUrls.concat(data));
     };
     getDataUrls();
   }, [files]);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Axios, db } from "../server/firestore";
 import Submitted from "./Submitted";
 import { getMakes, getModels } from "../server/carData";
@@ -24,9 +24,20 @@ import VehiclePhotos from "./VehiclePhotos";
 const EstimateForm = () => {
   const classes = useStyles();
 
+  const formRef = useRef(null);
+  
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const emailAddressRef = useRef(null);
+  const carYearRef = useRef(null);
+  const carMakeRef = useRef(null);
+  const carModelRef = useRef(null);
+  const refs = [firstNameRef,lastNameRef,emailAddressRef,carYearRef,carMakeRef,carModelRef];
+  
+  const [blankForm, setBlankForm] = useState(true);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [displayForm, setDisplayForm] = useState(true);
+  const [displayForm, setDisplayForm] = useState(!true);
   const [formData, setFormData] = useState({});
   const [carYear, setCarYear] = useState("");
   const [carMake, setCarMake] = useState("");
@@ -52,21 +63,13 @@ const EstimateForm = () => {
     });
     setTimeout(() => setLoading(false), 1000);
   };
-
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
   const sendEmail = () => {
     Axios.post(
       "https://us-central1-estimator-68282.cloudfunctions.net/sendMessage",
       formData
     );
   };
-  const addUser = (e) => {
-    e.preventDefault();
+  const addUser = () => {
     sendEmail();
     db.settings({
       timestampsInSnapshots: true,
@@ -87,6 +90,12 @@ const EstimateForm = () => {
         setDisplayForm(false);
       });
   };
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
   const handleYearChange = (year) => {
     setCarYear(parseInt(year));
     setLoading(true);
@@ -95,15 +104,22 @@ const EstimateForm = () => {
       hideLoading();
     });
   };
-  const validateField = (e) => {
-    const name = e.target.name;
+
+  const validateField = (e, email) => {
+    const name = e.name;
+    const value = e.value;
+    setBlankForm(false);
     const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (e.target.value < 2) {
-      setErrors(errors => [...errors, name])
-    } else setErrors(errors.filter((errorName) => errorName !== name ))
-    if (name === 'emailAddress' && !emailRegex.test(e.target.value)) {
-      setErrors(errors => [...errors, name])
-    } else setErrors(errors.filter((errorName) => errorName !== name ))
+
+    if (value < 2) {
+      setErrors((errors) => [...errors, name]);
+    } else if (email) {
+      !emailRegex.test(value)
+        ? setErrors((errors) => [...errors, name])
+        : setErrors(errors.filter((errorName) => errorName !== name));
+    } else {
+      setErrors(errors.filter((errorName) => errorName !== name));
+    }
   };
   const handleMakechange = (make) => {
     setCarMake(make);
@@ -112,6 +128,18 @@ const EstimateForm = () => {
       setModelOptions([...models]);
       hideLoading();
     });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    refs.forEach(field => {
+      validateField(field.current.querySelector('input'))
+    })
+    console.log("errors.length", errors.length); // eslint-disable-line
+    if (errors.length === 0 && !blankForm ) {
+      console.log("Should Submit"); // eslint-disable-line
+      // formRef.current.submit();
+      addUser();
+    }
   };
   const hideLoading = () => {
     setTimeout(() => {
@@ -128,8 +156,9 @@ const EstimateForm = () => {
         <div>
           <form
             id="EstimateForm"
+            ref={formRef}
             className={classes.form}
-            onSubmit={addUser}
+            onSubmit={handleSubmit}
             noValidate
             autoComplete="off"
           >
@@ -141,10 +170,11 @@ const EstimateForm = () => {
                 </div>
                 <TextField
                   name="firstName"
+                  ref={firstNameRef}
                   className={classes.textField}
                   id="outlined-basic"
-                  error={errors.includes('firstName')}
-                  onBlur={(e) => validateField(e)}
+                  error={errors.includes("firstName")}
+                  onBlur={(e) => validateField(e.target)}
                   onChange={(e) => {
                     handleInputChange(e);
                   }}
@@ -153,10 +183,11 @@ const EstimateForm = () => {
                 />
                 <TextField
                   name="lastName"
+                  ref={lastNameRef}
                   className={classes.textField}
                   id="outlined-basic"
-                  error={errors.includes('lastName')}
-                  onBlur={(e) => validateField(e)}
+                  error={errors.includes("lastName")}
+                  onBlur={(e) => validateField(e.target)}
                   onChange={(e) => {
                     handleInputChange(e);
                   }}
@@ -165,10 +196,11 @@ const EstimateForm = () => {
                 />
                 <TextField
                   name="emailAddress"
+                  ref={emailAddressRef}
                   className={classes.textField}
                   id="outlined-basic"
-                  error={errors.includes('emailAddress')}
-                  onBlur={(e) => validateField(e)}
+                  error={errors.includes("emailAddress")}
+                  onBlur={(e) => validateField(e.target, true)}
                   onChange={(e) => {
                     handleInputChange(e);
                   }}
@@ -185,8 +217,9 @@ const EstimateForm = () => {
                   value={carYear}
                   select
                   name="carYear"
-                  error={errors.includes('carYear')}
-                  onBlur={(e) => validateField(e)}
+                  ref={carYearRef}
+                  error={errors.includes("carYear")}
+                  onBlur={(e) => validateField(e.target)}
                   onChange={(e) => {
                     handleInputChange(e);
                     handleYearChange(e.target.value);
@@ -211,9 +244,10 @@ const EstimateForm = () => {
                   value={carMake}
                   select
                   name="carMake"
+                  ref={carMakeRef}
                   disabled={makeOptions.length > 1 ? false : true}
-                  error={errors.includes('carMake')}
-                  onBlur={(e) => validateField(e)}
+                  error={errors.includes("carMake")}
+                  onBlur={(e) => validateField(e.target)}
                   onChange={(e) => {
                     handleInputChange(e);
                     handleMakechange(e.target.value);
@@ -238,9 +272,10 @@ const EstimateForm = () => {
                   value={carModel}
                   select
                   name="carModel"
+                  ref={carModelRef}
                   disabled={modelOptions.length > 1 ? false : true}
-                  error={errors.includes('carModel')}
-                  onBlur={(e) => validateField(e)}
+                  error={errors.includes("carModel")}
+                  onBlur={(e) => validateField(e.target)}
                   onChange={(e) => {
                     handleInputChange(e);
                     setCarModel(e.target.value);
@@ -302,6 +337,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
+    justifyContent: "center",
   },
   loadingIcon: {
     color: "white",
