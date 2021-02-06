@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, GridList, GridListTile } from "@material-ui/core";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useFilePicker, utils } from "react-sage";
 import { ImageUpload } from "./ImageUpload";
+import SelectedImage from "./SelectedImage";
 
 //Styles
 import { makeStyles } from "@material-ui/core/styles";
@@ -9,9 +12,10 @@ import { makeStyles } from "@material-ui/core/styles";
 // Icons
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import ArrowBackRoundedIcon from "@material-ui/icons/ArrowBackRounded";
 
 const SageFilePicker = (props) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const { addSelectedImages, closeModal, loading } = props;
   const [selectedImage, setSelectedImage] = useState(false);
   const [dataUrls, setDataUrls] = useState([]);
@@ -61,19 +65,10 @@ const SageFilePicker = (props) => {
   return (
     <div className={classes.filePickerContainer}>
       {selectedImage ? (
-        <div className={classes.selectedImageContainer} style={{}}>
-          <div
-            className={classes.selectedImageBackButton}
-            onClick={(event) => setSelectedImage(null)}
-          >
-            <ArrowBackRoundedIcon />
-          </div>
-          <img
-            className={classes.selectedImage}
-            src={selectedImage}
-            alt="selected"
-          />
-        </div>
+        <SelectedImage
+          setSelectedImage={setSelectedImage}
+          selectedImage={selectedImage}
+        />
       ) : (
         <div className={classes.photosWrapper}>
           <div>
@@ -81,21 +76,21 @@ const SageFilePicker = (props) => {
           </div>
           {dataUrls ? (
             <Box display="flex" borderColor="black" className={classes.root}>
-              <GridList cellHeight={160} className={classes.gridList} cols={2}>
-                <GridListTile
-                  key="add image"
-                  cols={1}
-                  className={classes.gridListTile}
-                >
-                  <div className={classes.gridListTileUpload}>
-                    <PhotoLibraryIcon
-                      style={{ padding: "10px" }}
-                      onClick={handleAddImages}
-                      fontSize="large"
-                    />
-                    <span>Add Photos</span>
-                  </div>
-                </GridListTile>
+              <div className={classes.gridListTileUpload}>
+                <PhotoLibraryIcon
+                  style={{ padding: "10px" }}
+                  onClick={handleAddImages}
+                  fontSize="large"
+                />
+                <span className={classes.helperText}>
+                  Tap to add photos of your vehicles damage
+                </span>
+              </div>
+              <GridList
+                cellHeight={300}
+                className={classes.gridList}
+                cols={matches ? 3 : 2}
+              >
                 {dataUrls.map((url, index) => (
                   <GridListTile
                     key={url}
@@ -178,6 +173,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
+  helperText: {
+    paddingBottom: "1.5rem",
+  },
   button: {
     color: "white",
     backgroundColor: "#FC0000",
@@ -219,6 +217,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2rem",
   },
   gridListTileUpload: {
+    borderColor: "red",
+    borderWidth: "1px",
+    borderBottom: "1px",
     borderRadius: "1rem",
     display: "flex",
     flexDirection: "column",

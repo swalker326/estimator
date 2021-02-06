@@ -11,7 +11,6 @@ const CameraModal = (props) => {
     <div>
       <Button openModal={open} />
       <Modal {...modalProps} padding={false}>
-        {/* <ProCamera onCapture={onCapture} /> */}
         <SageFilePicker
           loading={props.loading}
           closeModal={close}
