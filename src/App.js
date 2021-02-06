@@ -9,7 +9,6 @@ function App() {
       <div
         style={{
           backgroundColor: "black",
-          width: "100%",
           height: "5rem",
           display: "flex",
           justifyContent: "center",

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Axios, db } from "../server/firestore";
 import Submitted from "./Submitted";
 import { getMakes, getModels } from "../server/carData";
+import SelectedImage from "./SelectedImage";
 import {
   Grid,
   TextField,
@@ -25,19 +26,27 @@ const EstimateForm = () => {
   const classes = useStyles();
 
   const formRef = useRef(null);
-  
+
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const emailAddressRef = useRef(null);
   const carYearRef = useRef(null);
   const carMakeRef = useRef(null);
   const carModelRef = useRef(null);
-  const refs = [firstNameRef,lastNameRef,emailAddressRef,carYearRef,carMakeRef,carModelRef];
-  
+  const refs = [
+    firstNameRef,
+    lastNameRef,
+    emailAddressRef,
+    carYearRef,
+    carMakeRef,
+    carModelRef,
+  ];
+
+  const [selectedImage, setSelectedImage] = useState(false);
   const [blankForm, setBlankForm] = useState(true);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [displayForm, setDisplayForm] = useState(!true);
+  const [displayForm, setDisplayForm] = useState(true);
   const [formData, setFormData] = useState({});
   const [carYear, setCarYear] = useState("");
   const [carMake, setCarMake] = useState("");
@@ -131,11 +140,11 @@ const EstimateForm = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    refs.forEach(field => {
-      validateField(field.current.querySelector('input'))
-    })
+    refs.forEach((field) => {
+      validateField(field.current.querySelector("input"));
+    });
     console.log("errors.length", errors.length); // eslint-disable-line
-    if (errors.length === 0 && !blankForm ) {
+    if (errors.length === 0 && !blankForm) {
       console.log("Should Submit"); // eslint-disable-line
       // formRef.current.submit();
       addUser();
@@ -153,179 +162,188 @@ const EstimateForm = () => {
         <CircularProgress className={classes.loadingIcon} />
       </Backdrop>
       {displayForm ? (
-        <div>
-          <form
-            id="EstimateForm"
-            ref={formRef}
-            className={classes.form}
-            onSubmit={handleSubmit}
-            noValidate
-            autoComplete="off"
-          >
-            <Grid container direction="row" spacing={2}>
-              <Grid item>
-                <div className={classes.headerRow}>
-                  <PermContactCalendarRoundedIcon fontSize="large" />
-                  <h3>Contact Info</h3>
-                </div>
-                <TextField
-                  name="firstName"
-                  ref={firstNameRef}
-                  className={classes.textField}
-                  id="outlined-basic"
-                  error={errors.includes("firstName")}
-                  onBlur={(e) => validateField(e.target)}
-                  onChange={(e) => {
-                    handleInputChange(e);
-                  }}
-                  label="First Name"
-                  variant="outlined"
-                />
-                <TextField
-                  name="lastName"
-                  ref={lastNameRef}
-                  className={classes.textField}
-                  id="outlined-basic"
-                  error={errors.includes("lastName")}
-                  onBlur={(e) => validateField(e.target)}
-                  onChange={(e) => {
-                    handleInputChange(e);
-                  }}
-                  label="Last Name"
-                  variant="outlined"
-                />
-                <TextField
-                  name="emailAddress"
-                  ref={emailAddressRef}
-                  className={classes.textField}
-                  id="outlined-basic"
-                  error={errors.includes("emailAddress")}
-                  onBlur={(e) => validateField(e.target, true)}
-                  onChange={(e) => {
-                    handleInputChange(e);
-                  }}
-                  label="Email"
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item>
-                <div className={classes.headerRow}>
-                  <DriveEtaRoundedIcon fontSize="large" />
-                  <h3>Vehicle Info</h3>
-                </div>
-                <TextField
-                  value={carYear}
-                  select
-                  name="carYear"
-                  ref={carYearRef}
-                  error={errors.includes("carYear")}
-                  onBlur={(e) => validateField(e.target)}
-                  onChange={(e) => {
-                    handleInputChange(e);
-                    handleYearChange(e.target.value);
-                  }}
-                  helperText="Select Vehicle Year"
-                  className={classes.textField}
-                  id="outlined-basic"
-                  label="Year"
-                  variant="outlined"
-                >
-                  {Years.years.map((option, index) => (
-                    <MenuItem
-                      style={{ maxHeight: "20px" }}
-                      key={index}
-                      value={option}
-                    >
-                      {option}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField
-                  value={carMake}
-                  select
-                  name="carMake"
-                  ref={carMakeRef}
-                  disabled={makeOptions.length > 1 ? false : true}
-                  error={errors.includes("carMake")}
-                  onBlur={(e) => validateField(e.target)}
-                  onChange={(e) => {
-                    handleInputChange(e);
-                    handleMakechange(e.target.value);
-                  }}
-                  helperText="Select Vehicle Make"
-                  className={classes.textField}
-                  id="outlined-basic"
-                  label="Make"
-                  variant="outlined"
-                >
-                  {makeOptions.map((make, index) => (
-                    <MenuItem
-                      style={{ maxHeight: "20px" }}
-                      key={index}
-                      value={make}
-                    >
-                      {make}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField
-                  value={carModel}
-                  select
-                  name="carModel"
-                  ref={carModelRef}
-                  disabled={modelOptions.length > 1 ? false : true}
-                  error={errors.includes("carModel")}
-                  onBlur={(e) => validateField(e.target)}
-                  onChange={(e) => {
-                    handleInputChange(e);
-                    setCarModel(e.target.value);
-                  }}
-                  helperText="Select Vehicle Model"
-                  className={classes.textField}
-                  id="outlined-basic"
-                  label="Model"
-                  variant="outlined"
-                >
-                  {modelOptions.map((make, index) => (
-                    <MenuItem
-                      style={{ maxHeight: "20px" }}
-                      key={index}
-                      value={make}
-                    >
-                      {make}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid xs={12} item>
-                <div className={classes.headerRow}>
-                  <PhotoCameraRoundedIcon fontSize="large" />
-                  <h3>Photos</h3>
-                </div>
-              </Grid>
-            </Grid>
-          </form>
-          <div className={classes.vehiclePhotos}>
-            <VehiclePhotos
-              loading={setLoading}
-              photos={photos}
-              onPhotoChange={setPhotos}
-              onCapture={updatePhotos}
-            />
-          </div>
-          <div className={classes.buttonWrapper}>
-            <Fab
-              style={{ color: "white", backgroundColor: "black" }}
-              size="large"
-              form="EstimateForm"
-              type="submit"
-              variant="extended"
-              aria-label="add"
+        selectedImage ? (
+          <SelectedImage
+            setSelectedImage={setSelectedImage}
+            selectedImage={selectedImage}
+          />
+        ) : (
+          <div>
+            <form
+              id="EstimateForm"
+              ref={formRef}
+              className={classes.form}
+              onSubmit={handleSubmit}
+              noValidate
+              autoComplete="off"
             >
-              Submit
-            </Fab>
+              <Grid container direction="column" spacing={2}>
+                <Grid item>
+                  <div className={classes.headerRow}>
+                    <PermContactCalendarRoundedIcon fontSize="large" />
+                    <h3>Contact Info</h3>
+                  </div>
+                  <TextField
+                    name="firstName"
+                    ref={firstNameRef}
+                    className={classes.textField}
+                    id="outlined-basic"
+                    error={errors.includes("firstName")}
+                    onBlur={(e) => validateField(e.target)}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                    }}
+                    label="First Name"
+                    variant="outlined"
+                  />
+                  <TextField
+                    name="lastName"
+                    ref={lastNameRef}
+                    className={classes.textField}
+                    id="outlined-basic"
+                    error={errors.includes("lastName")}
+                    onBlur={(e) => validateField(e.target)}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                    }}
+                    label="Last Name"
+                    variant="outlined"
+                  />
+                  <TextField
+                    name="emailAddress"
+                    ref={emailAddressRef}
+                    className={classes.textField}
+                    id="outlined-basic"
+                    error={errors.includes("emailAddress")}
+                    onBlur={(e) => validateField(e.target, true)}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                    }}
+                    label="Email"
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item>
+                  <div className={classes.headerRow}>
+                    <DriveEtaRoundedIcon fontSize="large" />
+                    <h3>Vehicle Info</h3>
+                  </div>
+                  <TextField
+                    value={carYear}
+                    select
+                    name="carYear"
+                    ref={carYearRef}
+                    error={errors.includes("carYear")}
+                    onBlur={(e) => validateField(e.target)}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                      handleYearChange(e.target.value);
+                    }}
+                    helperText="Select Vehicle Year"
+                    className={classes.textField}
+                    id="outlined-basic"
+                    label="Year"
+                    variant="outlined"
+                  >
+                    {Years.years.map((option, index) => (
+                      <MenuItem
+                        style={{ maxHeight: "20px" }}
+                        key={index}
+                        value={option}
+                      >
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <TextField
+                    value={carMake}
+                    select
+                    name="carMake"
+                    ref={carMakeRef}
+                    disabled={makeOptions.length > 1 ? false : true}
+                    error={errors.includes("carMake")}
+                    onBlur={(e) => validateField(e.target)}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                      handleMakechange(e.target.value);
+                    }}
+                    helperText="Select Vehicle Make"
+                    className={classes.textField}
+                    id="outlined-basic"
+                    label="Make"
+                    variant="outlined"
+                  >
+                    {makeOptions.map((make, index) => (
+                      <MenuItem
+                        style={{ maxHeight: "20px" }}
+                        key={index}
+                        value={make}
+                      >
+                        {make}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <TextField
+                    value={carModel}
+                    select
+                    name="carModel"
+                    ref={carModelRef}
+                    disabled={modelOptions.length > 1 ? false : true}
+                    error={errors.includes("carModel")}
+                    onBlur={(e) => validateField(e.target)}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                      setCarModel(e.target.value);
+                    }}
+                    helperText="Select Vehicle Model"
+                    className={classes.textField}
+                    id="outlined-basic"
+                    label="Model"
+                    variant="outlined"
+                  >
+                    {modelOptions.map((make, index) => (
+                      <MenuItem
+                        style={{ maxHeight: "20px" }}
+                        key={index}
+                        value={make}
+                      >
+                        {make}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid xs={12} item>
+                  <div className={classes.headerRow}>
+                    <PhotoCameraRoundedIcon fontSize="large" />
+                    <h3>Photos</h3>
+                  </div>
+                </Grid>
+              </Grid>
+            </form>
+            <div className={classes.vehiclePhotos}>
+              <VehiclePhotos
+                selectedImage={selectedImage}
+                setSelectedImage={setSelectedImage}
+                loading={setLoading}
+                photos={photos}
+                onPhotoChange={setPhotos}
+                onCapture={updatePhotos}
+              />
+            </div>
+            <div className={classes.buttonWrapper}>
+              <Fab
+                style={{ color: "white", backgroundColor: "black" }}
+                size="large"
+                form="EstimateForm"
+                type="submit"
+                variant="extended"
+                aria-label="add"
+              >
+                Submit
+              </Fab>
+            </div>
           </div>
-        </div>
+        )
       ) : (
         <Submitted />
       )}

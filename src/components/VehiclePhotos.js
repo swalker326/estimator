@@ -3,12 +3,18 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core/";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import CameraModal from "./CameraModal";
+import { EditLocation } from "@material-ui/icons";
 
 const VehiclePhotos = (props) => {
+  const { photos, setSelectedImage } = props;
   const updatePhotos = props.onCapture;
   const setPhotos = props.onPhotoChange;
-  const photos = props.photos;
+
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
   const removePhoto = (photoName) => {
     // const photosArray = photos.filter((photo) => photoName !== photo);
@@ -18,8 +24,12 @@ const VehiclePhotos = (props) => {
   const classes = useStyles();
   return (
     <Box display="flex" borderColor="black" className={classes.root}>
-      <GridList cellHeight={160} className={classes.gridList} cols={6}>
-        <GridListTile key="add icon" className={classes.gridListTile} cols={2}>
+      <GridList
+        cellHeight={300}
+        className={classes.gridList}
+        cols={matches ? 3 : 2}
+      >
+        <GridListTile key="add icon" className={classes.gridListTile} cols={1}>
           <div className={classes.addIconContainer}>
             <CameraModal loading={props.loading} onCapture={updatePhotos} />
             <span>Add Photos</span>
@@ -27,10 +37,12 @@ const VehiclePhotos = (props) => {
         </GridListTile>
         {photos.map((photo, index) => (
           <GridListTile
+            onClick={() => setSelectedImage(photo)}
             key={`damagePhoto_${index}`}
             className={classes.gridListTile}
-            cols={2}
+            cols={1}
           >
+          {console.log(photo)}
             <span
               onClick={() => removePhoto(photo)}
               className={classes.closeButton}
