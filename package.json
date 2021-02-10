@@ -28,6 +28,7 @@
     "pretty": "prettier --write \"./**/*.{js,jsx,json}\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "cp -R ./src/exports ./build/static",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
