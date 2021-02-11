@@ -18,10 +18,18 @@ script1.setAttribute(
   "src",
   "https://estimator-68282.web.app/static/js/2.7749d76c.chunk.js"
 );
+script1.setAttribute(
+  "type",
+  "text/babel"
+);
 const script2 = document.createElement("script");
 script2.setAttribute(
   "src",
   "https://estimator-68282.web.app/static/js/main.6a4cdcc0.chunk.js"
+);
+script2.setAttribute(
+  "type",
+  "text/bable"
 );
 document.body.appendChild(script1);
 document.body.appendChild(script2);
