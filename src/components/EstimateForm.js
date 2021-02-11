@@ -12,6 +12,7 @@ import {
   makeStyles,
   Fab,
 } from "@material-ui/core";
+import { useQueryParam, StringParam } from "use-query-params";
 import Years from "../years.json";
 
 // Icons
@@ -21,6 +22,7 @@ import PermContactCalendarRoundedIcon from "@material-ui/icons/PermContactCalend
 
 //Local Imports
 import VehiclePhotos from "./VehiclePhotos";
+import Banner from "./Banner";
 
 const EstimateForm = () => {
   const classes = useStyles();
@@ -42,6 +44,8 @@ const EstimateForm = () => {
     carModelRef,
   ];
 
+  const [shopID, setShopID] = useQueryParam("shopid", StringParam);
+  const [shopData, setShopData] = useState(false);
   const [selectedImage, setSelectedImage] = useState(false);
   const [blankForm, setBlankForm] = useState(true);
   const [errors, setErrors] = useState([]);
@@ -62,6 +66,19 @@ const EstimateForm = () => {
     });
   }, [photos]);
 
+  useEffect(() => {
+    if (shopID) getShopData();
+  }, []);
+
+  const getShopData = () => {
+    db.collection("shops")
+      .doc(shopID)
+      .get()
+      .then((doc) => {
+        setShopData(doc.data());
+      })
+      .catch((err) => console.error(err));
+  };
   const updatePhotos = (newPhotos) => {
     setPhotos((photos) => {
       setFormData({
@@ -75,14 +92,12 @@ const EstimateForm = () => {
   const sendEmail = () => {
     Axios.post(
       "https://us-central1-estimator-68282.cloudfunctions.net/sendMessage",
-      formData
+      { ...formData, shop_email: shopData.shop_email }
     );
   };
   const addUser = () => {
     sendEmail();
-    db.settings({
-      timestampsInSnapshots: true,
-    });
+    
     // eslint-disable-next-line no-unused-vars
     const userRef = db
       .collection("requested")
@@ -94,6 +109,7 @@ const EstimateForm = () => {
         carYear,
         carMake,
         carModel,
+        shopID,
       })
       .finally(() => {
         setDisplayForm(false);
@@ -143,10 +159,7 @@ const EstimateForm = () => {
     refs.forEach((field) => {
       validateField(field.current.querySelector("input"));
     });
-    console.log("errors.length", errors.length); // eslint-disable-line
     if (errors.length === 0 && !blankForm) {
-      console.log("Should Submit"); // eslint-disable-line
-      // formRef.current.submit();
       addUser();
     }
   };
@@ -158,6 +171,7 @@ const EstimateForm = () => {
 
   return (
     <div className={classes.root}>
+      <Banner banner={shopData.shop_banner} />
       <Backdrop className={classes.backdrop} open={loading}>
         <CircularProgress className={classes.loadingIcon} />
       </Backdrop>
