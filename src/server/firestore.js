@@ -18,6 +18,9 @@ let config = {
 firebase.initializeApp(config);
 
 var db = firebase.firestore();
+db.settings({
+      timestampsInSnapshots: true,
+    });
 var storage = firebase.storage();
 
 export { Axios, db, storage };
