@@ -37,19 +37,17 @@ const VehiclePhotos = (props) => {
         </GridListTile>
         {photos.map((photo, index) => (
           <GridListTile
-            onClick={() => setSelectedImage(photo)}
             key={`damagePhoto_${index}`}
             className={classes.gridListTile}
             cols={1}
           >
-          {console.log(photo)}
             <span
               onClick={() => removePhoto(photo)}
               className={classes.closeButton}
             >
               X
             </span>
-            <img src={photo} alt={`damageImage_${index}`} />
+            <img onClick={() => setSelectedImage(photo)} src={photo} alt={`damageImage_${index}`} />
           </GridListTile>
         ))}
       </GridList>
