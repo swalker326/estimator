@@ -1,0 +1,25 @@
+{
+  "search.exclude": {
+      "**/node_modules": true,
+  },
+  "git.autoStash": true,
+  "git.rebaseWhenSync": true,
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#dfb839",
+    "activityBar.activeBorder": "#ddc1d2",
+    "activityBar.background": "#dfb839",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#66ad5f",
+    "activityBarBadge.foreground": "#15202b",
+    "statusBar.background": "#000000",
+    "statusBar.foreground": "#ffffff",
+    "statusBarItem.hoverBackground": "#dfb839",
+    "titleBar.activeBackground": "#dfb839",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#4a6f8799",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#4A6F87",
+  "editor.detectIndentation": false,
+}
