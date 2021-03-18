@@ -1,16 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { QueryParamProvider } from "use-query-params";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import Store from "./state/store";
 
 ReactDOM.render(
   <Router>
-    <QueryParamProvider ReactRouterRoute={Route}>
-      <App />
-    </QueryParamProvider>
+    <React.StrictMode>
+      <Store>
+        <App />
+      </Store>
+    </React.StrictMode>
   </Router>,
   document.getElementById("root")
 );
