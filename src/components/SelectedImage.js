@@ -1,25 +1,36 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-
+import CancelIcon from "@material-ui/icons/Cancel";
 import ArrowBackRoundedIcon from "@material-ui/icons/ArrowBackRounded";
 //Local Impots
 
 const SelectedImage = (props) => {
   const classes = useStyles();
-  const { selectedImage, setSelectedImage } = props;
+  const { selectedImage, setSelectedImage, closeButton, fontSize } = props;
 
   return (
     <div className={classes.root}>
       <div className={classes.selectedImageContainer} style={{}}>
-        <div className={classes.backButtonContainer}>
-          <div
-            className={classes.backButton}
-            onClick={(event) => setSelectedImage(null)}
-          >
-            <ArrowBackRoundedIcon />
-          </div>
-        </div>
         <div className={classes.selectedImageWrapper}>
+          <div
+            className={classes.backButtonContainer}
+            style={
+              closeButton
+                ? { display: "flex", justifyContent: "flex-end" }
+                : null
+            }
+          >
+            <div className={classes.backButton}>
+              {closeButton ? (
+                <CancelIcon
+                  style={{ fontSize: fontSize || "40px" }}
+                  onClick={(event) => setSelectedImage(null)}
+                />
+              ) : (
+                null
+              )}
+            </div>
+          </div>
           <img
             className={classes.selectedImage}
             src={selectedImage}
@@ -33,7 +44,7 @@ const SelectedImage = (props) => {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxHeight: "80%"
+    height: "100%"
   },
   selectedImageContainer: {
     width: "100%",
@@ -45,27 +56,22 @@ const useStyles = makeStyles((theme) => ({
   selectedImageWrapper: {
     display: "flex",
     justifyContent: "center",
-    paddingTop: "3rem",
+    flexDirection: "column",
+    height:"100%",
   },
   backButtonContainer: {
-    cursor: "pointer",
-    padding: "1rem",
-    top: "20px",
-    left: "20px",
-    position: "sticky",
+    // padding: "1rem",
+    right: "1rem",
+    // position: "absolute",
     borderRadius: "50%",
   },
   backButton: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "3rem",
-    width: "3rem",
-    backgroundColor: "#fc0000",
-    borderRadius: "50%",
+    cursor: "pointer",
   },
   selectedImage: {
-    maxHeight: "80%",
+    maxWidth: "100%",
+    maxHeight: "50%",
+    alignSelf: "center",
     objectFit: "contain",
   },
 }));

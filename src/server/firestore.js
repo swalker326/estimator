@@ -22,5 +22,7 @@ db.settings({
       timestampsInSnapshots: true,
     });
 var storage = firebase.storage();
+var auth = firebase.auth();
+// auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
-export { Axios, db, storage };
+export { firebase, config, Axios, db, storage, auth };
