@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import {Context} from '../state/store';
 import { makeStyles } from "@material-ui/core/styles";
 import SelectedImage from "./SelectedImage";
 import Avatar from "@material-ui/core/Avatar";
@@ -6,7 +7,7 @@ import { deepOrange, deepPurple } from "@material-ui/core/colors";
 import { useParams } from "react-router-dom";
 import { db } from "../server/firestore";
 import { useModal, Modal } from "react-morphing-modal";
-import {Context} from '../state/store';
+import { Link } from "react-router-dom";
 
 //styles
 import "react-morphing-modal/dist/ReactMorphingModal.css";
@@ -25,7 +26,7 @@ const OpenModal = (props) => {
 };
 
 const Request = (props) => {
-  const { request } = props;
+  const [state, dispatch] = useContext(Context);
   const requestID = useParams();
   const [requestData, setRequestData] = useState(false);
   const { modalProps, open } = useModal({
@@ -47,10 +48,12 @@ const Request = (props) => {
   const classes = useStyles();
 
   return (
-    <div className="Request">
-      {props.currentReq}
+    <div className={classes.root}>
+      {state.request}
       <div className={classes.backIconContainer} >
-        <ArrowBackIcon onClick={() => props.setRequest('') } /> <span>Back</span>
+      <Link to={`/profile/${state.shopId}`}>
+        <ArrowBackIcon className = {classes.arrowIcon} onClick={() => dispatch({type: 'SET_REQUEST', currentRequest: '' })} />
+      </Link>
       </div>
       <Modal {...modalProps} padding={false}>
         <SelectedImage
@@ -62,7 +65,15 @@ const Request = (props) => {
       <div>
         <div className={classes.contactContainer}>
           <div className={classes.avatarContainer}>
-            <Avatar className={classes.purple}>OP</Avatar>
+            <Avatar className={classes.purple}>
+            {requestData ?
+              (
+                <span>
+                  {requestData.first_name.charAt(0).toUpperCase()}
+                  {requestData.last_name.charAt(0).toUpperCase()}
+                </span> 
+              ) : null }
+            </Avatar>
           </div>
           <div className={classes.contactDetailsWrapper}>
             <div>
@@ -76,7 +87,6 @@ const Request = (props) => {
               <h5 className={classes.contactDetails}>
                 {requestData.carYear} {requestData.carMake}
               </h5>
-              {/* <h5 className={classes.contactDetails}>{request.carMake}</h5> */}
               <h5 className={classes.contactDetails}>{requestData.carModel}</h5>
             </div>
           </div>
@@ -104,6 +114,10 @@ const Request = (props) => {
 export default Request;
 
 const useStyles = makeStyles((theme) => ({
+  arrowIcon: {
+    cursor: "pointer",
+    paddingTop: "3rem",
+  },
   avatarContainer: {
     display: "flex",
     paddingTop: "1rem",
@@ -113,7 +127,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     paddingLeft: "2rem",
-    cursor: "pointer",
     fontWeight: "700",
   },
   imageWrapper: {

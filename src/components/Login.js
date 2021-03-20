@@ -1,19 +1,28 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
+import {Context} from '../state/store';
 import { TextField, makeStyles, Button } from "@material-ui/core";
 import { auth } from "../server/firestore";
 import NewAccount from "./NewAccount";
 
 const Login = (props) => {
+  const [state, dispatch] = useContext(Context);
   const [errors, setErrors] = useState([]);
-  const [invalidLogin, setInvalidLogin] = useState(false);
   const [formData, setFormData] = useState(false);
   const [createAccount, setCreateAccount] = useState(false);
-
-  const { setUser, setAuth } = props;
 
   const emailAddressRef = useRef(null);
   const passwordRef = useRef(null);
   const classes = useStyles();
+
+  const setLoginError = (value) => {
+    dispatch({type: 'SET_ERROR', loginError: value})
+  }
+  const setUser = (user) => {
+    dispatch({type: 'SET_USER', user: user})
+  }
+  const setAuth = (auth) => {
+    dispatch({type: 'SET_AUTH', auth: auth})
+  }
 
   const validateField = () => {};
   const handleInputChange = (e) => {
@@ -21,7 +30,7 @@ const Login = (props) => {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setInvalidLogin(false);
+    setLoginError(false);
   };
   const signUserIn = () => {
     auth
@@ -34,8 +43,7 @@ const Login = (props) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         if (errorCode) {
-          console.log("Invalid Login"); // eslint-disable-line
-          setInvalidLogin(true);
+          setLoginError(true)
         }
         console.error("errorCode", errorCode); // eslint-disable-line
         console.error("errorMessage", errorMessage); // eslint-disable-line
@@ -50,7 +58,7 @@ const Login = (props) => {
           <div>
             <h2 style={{ textAlign: "center" }}> Sign In</h2>
               <div className={classes.error}>
-                { invalidLogin ? "Incorrect username or password" : ""}
+                { state.loginError ? "Incorrect username or password" : ""}
               </div>
             <form style={{ display: "flex", flexDirection: "column" }}>
               <TextField

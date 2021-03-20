@@ -8,8 +8,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import {Context} from '../state/store';
-import Request from "./Request";
-import { Link, Route, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -24,9 +23,9 @@ const useStyles = makeStyles({
 });
 
 const QuoteList = (props) => {
-  const { path, url } = useRouteMatch();
+  const { url } = useRouteMatch();
   const [state, dispatch] = useContext(Context);
-  const { requests, setRequest } = props;
+  const {requests} = props;
   const classes = useStyles();
   const nameUpperCase = (name) => {
     return name.charAt(0).toUpperCase() + name.slice(1);
@@ -38,7 +37,7 @@ const QuoteList = (props) => {
         ? requests.map((request) => {
             return (
               <Card className={classes.root} key={request.id}>
-                <Link to={`${url}/request/${request.id}`} onClick={() => dispatch({type: 'SET_REQUEST', currentRequest: request.id })}>
+                <Link onClick={() => dispatch({type: 'SET_REQUEST', currentRequest: request.id })} to={`${url}/request/${request.id}`}>
                   <CardActionArea>
                     <CardMedia
                       className={classes.media}
@@ -48,7 +47,7 @@ const QuoteList = (props) => {
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="h2">
                         {nameUpperCase(request.first_name) + " "}
-                        {request.last_name.charAt(0).toUpperCase()}
+                        {nameUpperCase(request.last_name)}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -69,7 +68,7 @@ const QuoteList = (props) => {
                 </Link>
                 <CardActions>
                   <Button
-                    onClick={() => setRequest(request)}
+                    onClick={() => dispatch({type: 'SET_REQUEST', currentRequest: request.id })}
                     size="small"
                     color="primary"
                   >

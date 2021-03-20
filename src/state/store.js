@@ -6,6 +6,7 @@ const initialState = {
   user: {},
   auth: false,
   request: "",
+  loginError: false,
 };
 
 const Store =({children}) => {

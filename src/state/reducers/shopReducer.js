@@ -1,6 +1,4 @@
 const Reducer = (state, action) => {
-  // console.log("action", action); // eslint-disable-line
-  // console.log("state", state); // eslint-disable-line
   switch(action.type){
     case 'SET_SHOP':
       return{
@@ -12,6 +10,21 @@ const Reducer = (state, action) => {
       return {
         ...state,
         currentRequest: action.currentRequest
+      };
+    case 'SET_USER':
+      return {
+        ...state,
+        user: action.user
+      };
+    case 'SET_ERROR':
+      return {
+        ...state,
+        loginError: action.loginError
+      };
+    case 'SET_AUTH':
+      return {
+        ...state,
+        auth: action.auth
       };
     default: return state;
   };

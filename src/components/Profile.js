@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import {Context} from '../state/store';
+import { Context } from "../state/store";
 import QuoteList from "./QuoteList";
-import Request from "./Request";
 import { makeStyles } from "@material-ui/core/styles";
-import { useParams, Route, useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { db } from "../server/firestore";
 
 const useStyles = makeStyles({
@@ -33,14 +32,12 @@ const useStyles = makeStyles({
 });
 
 const Profile = (props) => {
-
   const [state, dispatch] = useContext(Context);
   const paramData = useParams();
   const shopId = state.shopId;
-  const shopRequest = state.currentRequest;
-  const { path, url } = useRouteMatch();
-  const [request, setRequest] = useState(false);
-  const [shopData, setShopData] = useState({});
+  const setShopData = (data) => {
+    dispatch({ type: "SET_SHOP", shopId: paramData.id, shopData: data });
+  };
   const [requests, setRequests] = useState([]);
 
   const classes = useStyles();
@@ -52,7 +49,6 @@ const Profile = (props) => {
       .then((doc) => {
         const docData = doc.data();
         docData.shop_id = shopId;
-        console.log("doc", docData); // eslint-disable-line
         setShopData(docData);
       })
       .catch((err) => console.error(err));
@@ -70,28 +66,22 @@ const Profile = (props) => {
       });
   };
   useEffect(() => {
-      console.log("setting shopId"); // eslint-disable-line
-      dispatch({type: 'SET_SHOP', shopId: paramData.id, shopData: shopData})
+    dispatch({ type: "SET_SHOP", shopId: paramData.id, shopData: null });
   }, []);
   useEffect(() => {
-      console.log("getting shop data"); // eslint-disable-line
-      if (shopId) {
-        getShopRequests();
-        getShopData();
-      }
+    if (shopId) {
+      getShopRequests();
+      getShopData();
+    }
   }, [shopId]);
 
   return (
     <div className="Profile">
-    <div>Shop ID: {shopData.shop_id}</div>
       <div className={classes.content}>
-        {request ? null : (
-          <QuoteList currentReq={shopRequest} setRequest={setRequest} requests={requests} />
-        )}
+          <QuoteList
+            requests={requests}
+          />
       </div>
-      <Route exact={true} path={`${path}/request/:id`}>
-        <Request setRequest= {setRequest} />
-      </Route>
     </div>
   );
 };
