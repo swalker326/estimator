@@ -4,3 +4,10 @@
 .MuiGridListTile-tile {
   border-radius: 1rem;
 }
+span.MuiBadge-badge {
+  z-index: 0;
+}
+a {
+  color: black;
+  text-decoration: none;
+}

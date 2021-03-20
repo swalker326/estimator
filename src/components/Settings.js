@@ -1,15 +1,16 @@
-import React from 'react'
-import { useParams } from "react-router-dom";
+import React, {useContext} from 'react'
+import {Context} from '../state/store';
 
 //Local Impots
 
 const Settings = (props) => {
-  const {setDisplaySettings, } = props
-  const shopID = useParams();
+  const [state, dispatch] = useContext(Context);
 return(
    <div className='Settings' >
-     display User Settings
-     {shopID.id}
+     <img src={state.shopData.shop_banner} alt="banner"/>
+     <div>Shop ID: {state.shopData.shop_id}</div>
+     <div>Shop Name: {state.shopData.shop_name}</div>
+     <div>Shop Email: {state.shopData.shop_email}</div>
    </div>
  )
 }

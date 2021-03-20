@@ -1,46 +1,54 @@
-import React, { useState, useEffect } from "react";
-import { Switch, Route, useHistory} from "react-router-dom";
+import React, { useEffect, useContext } from "react";
+import { Context } from "./state/store";
+import { Switch, Route, useHistory } from "react-router-dom";
 import Header from "./components/Header";
 import Profile from "./components/Profile";
 import NewAccount from "./components/NewAccount";
 import Login from "./components/Login";
+import Request from "./components/Request";
+import Settings from "./components/Settings";
 import { db } from "./server/firestore";
 
 import "./components/styles/Overrides.css";
 
 function App() {
   const history = useHistory();
-  const [auth, setAuth] = useState(false);
-  const [user, setUser] = useState(null);
-  const [shopID, setShopID] = useState(null);
+  const [state] = useContext(Context);
 
   const getShop = () => {
     db.collection("shops")
-      .where("user", "==", user.uid)
+      .where("user", "==", state.user.uid)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          setShopID(doc.id);
           history.push(`/profile/${doc.id}`);
         });
       });
   };
   useEffect(() => {
-    if (user) getShop();
-  }, [user]);
+    if (state.user?.uid) {
+      getShop();
+    }
+  }, [state.user]);
   return (
     <div className="App">
-      <Header shopID={shopID} />
+      <Header />
       <Switch>
         <Route exact={true} path="/login">
-          <Login setAuth={setAuth} setUser={setUser} />
+          <Login />
         </Route>
         <Route path="/createaccount">
-          <NewAccount setUser={setUser} />
+          <NewAccount />
         </Route>
-        <Route path="/profile/:id">
-          <Profile shopID={shopID} />
+        <Route exact path="/profile/:id">
+          <Profile />
         </Route>
+        <Route path="/profile/settings/:id">
+          <Settings />
+        </Route>
+        <Route path={`/profile/:shop_id/request/:id`}>
+          <Request />
+      </Route>
       </Switch>
     </div>
   );

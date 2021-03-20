@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "../state/store";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -9,9 +10,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import SettingsIcon from "@material-ui/icons/Settings";
-import Settings from "./Settings";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { Link, Route, useRouteMatch } from "react-router-dom";
+import ExitToApp from "@material-ui/icons/ExitToApp";
+import { Link, useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -78,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header = (props) => {
-  const { shopID } = props;
+  const [state, dispatch] = useContext(Context);
   const { path, url } = useRouteMatch();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -86,6 +87,10 @@ const Header = (props) => {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const logUserOut = () => {
+    dispatch({ type: "SET_USER", user: "" });
+    dispatch({ type: "SET_AUTH", auth: false });
+  };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -136,9 +141,14 @@ const Header = (props) => {
         <p>Notifications</p>
       </MenuItem>
       <MenuItem>
-        <IconButton aria-label="account of current user" color="inherit">
+        <IconButton aria-label="log current user out" color="inherit">
           <Link to={`${url}/settings`}>
             <SettingsIcon />
+          </Link>
+        </IconButton>
+        <IconButton aria-label="account of current user" color="inherit">
+          <Link to="/login">
+            <ExitToApp onClick={logUserOut} />
           </Link>
         </IconButton>
         <p>Profile</p>
@@ -153,7 +163,7 @@ const Header = (props) => {
           <Typography className={classes.title} variant="h6" noWrap>
             <Link
               style={{ textDecoration: "none", color: "white" }}
-              to={`/profile/${shopID}`}
+              to={`/profile/${state.shopId}`}
             >
               qhoto IO
             </Link>
@@ -170,8 +180,13 @@ const Header = (props) => {
               aria-label="account of current user"
               color="inherit"
             >
-              <Link to={`/profile/${shopID}/settings`}>
-                <SettingsIcon />
+              <Link to={`/profile/settings/${state.shopId}`}>
+                <SettingsIcon style={{color: 'white'}}/>
+              </Link>
+            </IconButton>
+            <IconButton aria-label="account of current user" color="inherit">
+              <Link to="/login">
+                <ExitToApp style={{color: 'white'}} onClick={logUserOut} />
               </Link>
             </IconButton>
           </div>
@@ -190,9 +205,6 @@ const Header = (props) => {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
-      <Route exact path={`/profile/:id/settings`}>
-        <Settings />
-      </Route>
     </div>
   );
 };

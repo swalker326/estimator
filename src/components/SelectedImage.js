@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CancelIcon from "@material-ui/icons/Cancel";
-import ArrowBackRoundedIcon from "@material-ui/icons/ArrowBackRounded";
 //Local Impots
 
 const SelectedImage = (props) => {
