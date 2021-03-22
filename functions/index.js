@@ -29,7 +29,7 @@ exports.sendMessage = functions.https.onRequest((req, res) => {
       const mailOptions = {
         from: req.body.emailAddress,
         replyTo: req.body.emailAddress,
-        to: gmailEmail,
+        to: req.body.shop_email,
         subject: `${req.body.firstName} just requested a quote`,
         html: `
         <div>
