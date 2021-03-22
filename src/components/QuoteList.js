@@ -1,4 +1,5 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
+import { db } from "../server/firestore";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -7,8 +8,11 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import {Context} from '../state/store';
+import { Context } from "../state/store";
 import { Link, useRouteMatch } from "react-router-dom";
+import DeleteIcon from "@material-ui/icons/Delete";
+import MenuIcon from "@material-ui/icons/Menu";
+import SimpleDialog from "./utils/SimpleDialog";
 
 const useStyles = makeStyles({
   root: {
@@ -20,13 +24,29 @@ const useStyles = makeStyles({
   media: {
     height: 140,
   },
+  deleteButtonContainer: {
+    float: "right",
+  },
+  cardButtons: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
 });
 
 const QuoteList = (props) => {
   const { url } = useRouteMatch();
   const [state, dispatch] = useContext(Context);
-  const {requests} = props;
+  const { requests } = props;
   const classes = useStyles();
+  const deleteQuote = (id) => {
+    db.collection("requested")
+      .doc(id)
+      .delete()
+      .then((doc) => {
+        console.log("Doc Removed"); // eslint-disable-line
+        props.getShopRequests();
+      });
+  };
   const nameUpperCase = (name) => {
     return name.charAt(0).toUpperCase() + name.slice(1);
   };
@@ -37,7 +57,15 @@ const QuoteList = (props) => {
         ? requests.map((request) => {
             return (
               <Card className={classes.root} key={request.id}>
-                <Link onClick={() => dispatch({type: 'SET_REQUEST', currentRequest: request.id })} to={`${url}/request/${request.id}`}>
+                <Link
+                  onClick={() =>
+                    dispatch({
+                      type: "SET_REQUEST",
+                      currentRequest: request.id,
+                    })
+                  }
+                  to={`${url}/request/${request.id}`}
+                >
                   <CardActionArea>
                     <CardMedia
                       className={classes.media}
@@ -66,14 +94,24 @@ const QuoteList = (props) => {
                     </CardContent>
                   </CardActionArea>
                 </Link>
-                <CardActions>
-                  <Button
-                    onClick={() => dispatch({type: 'SET_REQUEST', currentRequest: request.id })}
-                    size="small"
-                    color="primary"
+                <CardActions className={classes.cardButtons}>
+                  <Link
+                    onClick={() =>
+                      dispatch({
+                        type: "SET_REQUEST",
+                        currentRequest: request.id,
+                      })
+                    }
+                    to={`${url}/request/${request.id}`}
                   >
-                    Details
-                  </Button>
+                    <Button>
+                      <MenuIcon />
+                    </Button>
+                  </Link>
+                  <SimpleDialog
+                    onClose={() => deleteQuote(request.id)}
+                    icon={DeleteIcon}
+                  />
                 </CardActions>
               </Card>
             );
