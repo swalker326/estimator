@@ -6,7 +6,6 @@ import GridListTile from "@material-ui/core/GridListTile";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import CameraModal from "./CameraModal";
-import { EditLocation } from "@material-ui/icons";
 
 const VehiclePhotos = (props) => {
   const { photos, setSelectedImage } = props;
