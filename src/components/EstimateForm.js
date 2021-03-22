@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { Context } from "../state/store";
 import { Axios, db } from "../server/firestore";
 import Submitted from "./Submitted";
 import { getMakes, getModels } from "../server/carData";
@@ -12,7 +13,6 @@ import {
   makeStyles,
   Fab,
 } from "@material-ui/core";
-import { useQueryParam, StringParam } from "use-query-params";
 import Years from "../years.json";
 
 // Icons
@@ -26,7 +26,7 @@ import Banner from "./Banner";
 
 const EstimateForm = () => {
   const classes = useStyles();
-
+  const [state, dispatch] = useContext(Context);
   const formRef = useRef(null);
 
   const firstNameRef = useRef(null);
@@ -44,7 +44,7 @@ const EstimateForm = () => {
     carModelRef,
   ];
 
-  const [shopID, setShopID] = useQueryParam("shopid", StringParam);
+  const shopID = state.shopId;
   const [shopData, setShopData] = useState(false);
   const [selectedImage, setSelectedImage] = useState(false);
   const [blankForm, setBlankForm] = useState(true);
@@ -65,6 +65,7 @@ const EstimateForm = () => {
       photos: [...photos],
     });
   }, [photos]);
+  console.log("shopID", shopID); // eslint-disable-line
 
   useEffect(() => {
     if (shopID) getShopData();
