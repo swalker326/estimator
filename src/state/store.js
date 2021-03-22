@@ -3,6 +3,7 @@ import Reducer from './reducers/shopReducer';
 
 const initialState = {
   shop: {},
+  shopId: "",
   user: {},
   auth: false,
   request: "",
