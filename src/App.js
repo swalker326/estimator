@@ -7,6 +7,8 @@ import NewAccount from "./components/NewAccount";
 import Login from "./components/Login";
 import Request from "./components/Request";
 import Settings from "./components/Settings";
+import Splash from "./components/Splash";
+import EstimateForm from "./components/EstimateForm";
 import { db } from "./server/firestore";
 
 import "./components/styles/Overrides.css";
@@ -34,6 +36,9 @@ function App() {
     <div className="App">
       <Header />
       <Switch>
+        <Route exact={true} path="/">
+          <Splash />
+        </Route>
         <Route exact={true} path="/login">
           <Login />
         </Route>
@@ -48,7 +53,10 @@ function App() {
         </Route>
         <Route path={`/profile/:shop_id/request/:id`}>
           <Request />
-      </Route>
+        </Route>
+        <Route path={`/profile/form/:shop_id`}>
+          <EstimateForm />
+        </Route>
       </Switch>
     </div>
   );
