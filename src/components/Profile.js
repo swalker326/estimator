@@ -54,6 +54,7 @@ const Profile = (props) => {
       .catch((err) => console.error(err));
   };
   const getShopRequests = () => {
+    setRequests("");
     db.collection("requested")
       .where("shopID", "==", shopId)
       .get()
@@ -78,9 +79,12 @@ const Profile = (props) => {
   return (
     <div className="Profile">
       <div className={classes.content}>
+          {requests ? 
           <QuoteList
             requests={requests}
-          />
+            getShopRequests={getShopRequests}
+          /> : <div>No requests =( tell people to submit requests</div>
+          }
       </div>
     </div>
   );

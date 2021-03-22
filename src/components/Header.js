@@ -90,6 +90,7 @@ const Header = (props) => {
   const logUserOut = () => {
     dispatch({ type: "SET_USER", user: "" });
     dispatch({ type: "SET_AUTH", auth: false });
+    dispatch({ type: "SET_SHOP", shopId: "", shopData: {} });
   };
 
   const handleMobileMenuClose = () => {
@@ -186,7 +187,7 @@ const Header = (props) => {
             </IconButton>
             <IconButton aria-label="account of current user" color="inherit">
               <Link to="/login">
-                <ExitToApp style={{color: 'white'}} onClick={logUserOut} />
+                <ExitToApp style={{color: 'white'}} onClick={state.auth ? logUserOut : () => null} />
               </Link>
             </IconButton>
           </div>
