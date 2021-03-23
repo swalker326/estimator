@@ -13,6 +13,8 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ExitToApp from "@material-ui/icons/ExitToApp";
 import { Link, useRouteMatch } from "react-router-dom";
+import qhotoLogoPng from "../assets/qhoto.png";
+import logo from "../assets/qhoto_font_logo.png"
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -53,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: "inherit",
+  },
+  logo: {
+    width: "150px",
+    margin: "12px",
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -179,7 +185,11 @@ const Header = (props) => {
               style={{ textDecoration: "none", color: "white" }}
               to={`/profile/${state.shopId}`}
             >
-              qhoto IO
+              <img
+                className={classes.logo}
+                alt="logo_image"
+                src={logo}
+              />
             </Link>
           </Typography>
           <div className={classes.grow} />
@@ -207,9 +217,7 @@ const Header = (props) => {
             ) : null}
             <IconButton aria-label="account of current user" color="inherit">
               <Link to="/login" onClick={state.auth ? logUserOut : () => null}>
-                <ExitToApp
-                  style={{ color: "white" }}
-                />
+                <ExitToApp style={{ color: "white" }} />
               </Link>
             </IconButton>
           </div>
