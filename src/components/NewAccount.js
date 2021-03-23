@@ -63,7 +63,6 @@ const NewAccount = (props) => {
       .then((userCred) => {
         setUser(userCred.user);
         if (value === 1) {
-          console.log("create new shop"); // eslint-disable-line
           db.collection("shops").add({
             first_name: formData.first_name,
             last_name: formData.last_name,
