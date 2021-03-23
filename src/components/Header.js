@@ -133,14 +133,19 @@ const Header = (props) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show new notifications" color="inherit">
-          <Badge badgeContent={state.shopData?.notifications} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
+      {state.auth ? (
+        <MenuItem>
+          <IconButton aria-label="show new notifications" color="inherit">
+            <Badge
+              badgeContent={state.shopData?.notifications}
+              color="secondary"
+            >
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <p>Notifications</p>
+        </MenuItem>
+      ) : null}
       <MenuItem>
         <IconButton aria-label="log current user out" color="inherit">
           <Link to={`${url}/settings`}>
@@ -171,23 +176,33 @@ const Header = (props) => {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show new notifications" color="inherit">
-              <Badge badgeContent={state.shopData?.notifications} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              color="inherit"
-            >
-              <Link to={`/profile/settings/${state.shopId}`}>
-                <SettingsIcon style={{color: 'white'}}/>
-              </Link>
-            </IconButton>
+            {state.auth ? (
+              <div>
+                <IconButton aria-label="show new notifications" color="inherit">
+                  <Badge
+                    badgeContent={state.shopData?.notifications}
+                    color="secondary"
+                  >
+                    <NotificationsIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton
+                  edge="end"
+                  aria-label="account of current user"
+                  color="inherit"
+                >
+                  <Link to={`/profile/settings/${state.shopId}`}>
+                    <SettingsIcon style={{ color: "white" }} />
+                  </Link>
+                </IconButton>
+              </div>
+            ) : null}
             <IconButton aria-label="account of current user" color="inherit">
               <Link to="/login">
-                <ExitToApp style={{color: 'white'}} onClick={state.auth ? logUserOut : () => null} />
+                <ExitToApp
+                  style={{ color: "white" }}
+                  onClick={state.auth ? logUserOut : () => null}
+                />
               </Link>
             </IconButton>
           </div>
