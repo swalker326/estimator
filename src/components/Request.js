@@ -22,12 +22,12 @@ const OpenModal = (props) => {
     setSelectedImage(selectedImage)
     openModal(imgRef);
   }
-  return <img ref={imgRef} onClick={handleClick} {...props} alt="damage" />;
+  return <img style={{boxShadow: "5px 3px 5px 0px #898989"}} ref={imgRef} onClick={handleClick} {...props} alt="damage" />;
 };
 
 const Request = (props) => {
   const [state, dispatch] = useContext(Context);
-  const requestID = useParams();
+  const requestId = useParams().request_id;
   const [requestData, setRequestData] = useState(false);
   const { modalProps, open } = useModal({
     background: 'rgba(0,0,0,0.7)',
@@ -35,13 +35,13 @@ const Request = (props) => {
 
   const getRequestData = () => {
     db.collection("requested")
-      .doc(requestID.id)
+      .doc(requestId)
       .get()
       .then((doc) => setRequestData(doc.data()));
   };
   useEffect(() => {
     getRequestData();
-  }, [requestID]);
+  }, [requestId]);
 
   const [selectedImage, setSelectedImage] = useState(false);
 

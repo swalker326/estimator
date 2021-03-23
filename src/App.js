@@ -10,6 +10,7 @@ import Settings from "./components/Settings";
 import Splash from "./components/Splash";
 import EstimateForm from "./components/EstimateForm";
 import { db } from "./server/firestore";
+import PrivateRoute from "./components/utils/PrivateRoute";
 
 import "./components/styles/Overrides.css";
 
@@ -45,15 +46,15 @@ function App() {
         <Route path="/createaccount">
           <NewAccount />
         </Route>
-        <Route exact path="/profile/:id">
+        <PrivateRoute exact path="/profile/:shop_id">
           <Profile />
-        </Route>
-        <Route path="/profile/settings/:id">
+        </PrivateRoute>
+        <PrivateRoute path="/profile/settings/:shop_id">
           <Settings />
-        </Route>
-        <Route path={`/profile/:shop_id/request/:id`}>
+        </PrivateRoute>
+        <PrivateRoute path={`/profile/:shop_id/request/:request_id`}>
           <Request />
-        </Route>
+        </PrivateRoute>
         <Route path={`/profile/form/:shop_id`}>
           <EstimateForm />
         </Route>

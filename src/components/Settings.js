@@ -66,7 +66,6 @@ const useStyles = makeStyles((theme) => ({
 const Settings = (props) => {
   const classes = useStyles();
   const b64toBlob = (dataURI) => {
-    console.log("dataURI", dataURI); // eslint-disable-line
     const byteString = atob(dataURI.split(",")[1]);
     const ab = new ArrayBuffer(byteString.length);
     const ia = new Uint8Array(ab);
@@ -100,7 +99,6 @@ const Settings = (props) => {
     });
   };
   const handleSettingsSave = () => {
-    console.log("handleSettings fired"); // eslint-disable-line
     db.collection("shops")
       .doc(state.shopId)
       .update({
