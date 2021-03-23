@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { Context } from "./state/store";
 import { Switch, Route, useHistory } from "react-router-dom";
-import Header from "./components/Header";
+import HeaderRoute from "./components/utils/HeaderRoute";
 import Profile from "./components/Profile";
 import NewAccount from "./components/NewAccount";
 import Login from "./components/Login";
@@ -11,6 +11,7 @@ import Splash from "./components/Splash";
 import EstimateForm from "./components/EstimateForm";
 import { db } from "./server/firestore";
 import PrivateRoute from "./components/utils/PrivateRoute";
+import ForgotPassword from "./components/ForgotPassword";
 
 import "./components/styles/Overrides.css";
 
@@ -35,16 +36,18 @@ function App() {
   }, [state.user]);
   return (
     <div className="App">
-      <Header />
       <Switch>
-        <Route exact={true} path="/">
+        <HeaderRoute exact={true} path="/">
           <Splash />
-        </Route>
-        <Route exact={true} path="/login">
+        </HeaderRoute>
+        <HeaderRoute exact={true} path="/login">
           <Login />
-        </Route>
-        <Route path="/createaccount">
+        </HeaderRoute>
+        <HeaderRoute path="/createaccount">
           <NewAccount />
+        </HeaderRoute>
+        <Route path={`/profile/form/:shop_id`}>
+          <EstimateForm />
         </Route>
         <PrivateRoute exact path="/profile/:shop_id">
           <Profile />
@@ -55,9 +58,9 @@ function App() {
         <PrivateRoute path={`/profile/:shop_id/request/:request_id`}>
           <Request />
         </PrivateRoute>
-        <Route path={`/profile/form/:shop_id`}>
-          <EstimateForm />
-        </Route>
+        <HeaderRoute path={`/password_reset`}>
+          <ForgotPassword />
+        </HeaderRoute>
       </Switch>
     </div>
   );
