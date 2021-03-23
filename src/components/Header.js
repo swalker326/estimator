@@ -80,7 +80,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   const [state, dispatch] = useContext(Context);
-  const { path, url } = useRouteMatch();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -134,30 +133,39 @@ const Header = (props) => {
       onClose={handleMobileMenuClose}
     >
       {state.auth ? (
-        <MenuItem>
-          <IconButton aria-label="show new notifications" color="inherit">
-            <Badge
-              badgeContent={state.shopData?.notifications}
-              color="secondary"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
+        <div>
+          <MenuItem>
+            <IconButton aria-label="show new notifications" color="inherit">
+              <Badge
+                badgeContent={state.shopData?.notifications}
+                color="secondary"
+              >
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <p>Notifications</p>
+          </MenuItem>
+          <MenuItem>
+            <Link to={`/profile/settings/${state.shopId}`}>
+              <div style={{ display: "flex" }}>
+                <IconButton aria-label="log current user out" color="inherit">
+                  <SettingsIcon />
+                </IconButton>
+                <p>Settings</p>
+              </div>
+            </Link>
+          </MenuItem>
+        </div>
       ) : null}
       <MenuItem>
-        <IconButton aria-label="log current user out" color="inherit">
-          <Link to={`${url}/settings`}>
-            <SettingsIcon />
-          </Link>
-        </IconButton>
-        <IconButton aria-label="account of current user" color="inherit">
-          <Link to="/login">
-            <ExitToApp onClick={logUserOut} />
-          </Link>
-        </IconButton>
-        <p>Profile</p>
+        <Link to="/login" onClick={state.auth ? logUserOut : () => null}>
+          <div style={{ display: "flex" }}>
+            <IconButton aria-label="account of current user" color="inherit">
+              <ExitToApp />
+            </IconButton>
+            <p>Profile</p>
+          </div>
+        </Link>
       </MenuItem>
     </Menu>
   );
@@ -198,10 +206,9 @@ const Header = (props) => {
               </div>
             ) : null}
             <IconButton aria-label="account of current user" color="inherit">
-              <Link to="/login">
+              <Link to="/login" onClick={state.auth ? logUserOut : () => null}>
                 <ExitToApp
                   style={{ color: "white" }}
-                  onClick={state.auth ? logUserOut : () => null}
                 />
               </Link>
             </IconButton>
