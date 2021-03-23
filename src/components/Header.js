@@ -13,8 +13,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ExitToApp from "@material-ui/icons/ExitToApp";
 import { Link, useRouteMatch } from "react-router-dom";
-import qhotoLogoPng from "../assets/qhoto.png";
-import logo from "../assets/qhoto_font_logo.png"
+import logo from "../assets/qhoto_font_logo.png";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -183,13 +182,9 @@ const Header = (props) => {
           <Typography className={classes.title} variant="h6" noWrap>
             <Link
               style={{ textDecoration: "none", color: "white" }}
-              to={`/profile/${state.shopId}`}
+              to={state.shopId ? `/profile/${state.shopId}` : `/`}
             >
-              <img
-                className={classes.logo}
-                alt="logo_image"
-                src={logo}
-              />
+              <img className={classes.logo} alt="logo_image" src={logo} />
             </Link>
           </Typography>
           <div className={classes.grow} />
