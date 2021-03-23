@@ -8,8 +8,6 @@ const Splash = () => {
   const [subscribed, setSubscribed] = useState(false);
   
   const paypalSubscribe = (data, actions) => {
-    console.log("data", data); // eslint-disable-line
-    console.log("actions", actions); // eslint-disable-line
     return actions.subscription.create({
       plan_id: process.env.REACT_APP_PAYPAL_PLAN_ID,
     });
@@ -19,8 +17,6 @@ const Splash = () => {
   };
   const paypalOnApprove = (data, detail) => {
     // call the backend api to store transaction details
-    console.log("Payapl approved");
-    console.log("data",data);
     setSubscribed(true);
   };
   if (subscribed) return <Redirect to="/login"/>
@@ -42,6 +38,3 @@ const Splash = () => {
 
 export default Splash;
 
-{
-  /* styles  */
-}

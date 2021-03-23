@@ -9,14 +9,14 @@ return(
      <div
         style={{
           backgroundColor: "black",
-          height: "5rem",
+          height: "200px",
           display: "flex",
           justifyContent: "center"
         }}
       >
         <img
           alt=""
-          style={{ maxHeight: "-webkit-fill-available" }}
+          style={{ objectFit: "cover", width: "100%" }}
           src={banner}
         ></img>
       </div>

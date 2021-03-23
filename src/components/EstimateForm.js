@@ -12,7 +12,7 @@ import {
   makeStyles,
   Fab,
 } from "@material-ui/core";
-import { useQueryParam, StringParam } from "use-query-params";
+import { useParams } from "react-router-dom";
 import Years from "../years.json";
 
 // Icons
@@ -44,7 +44,8 @@ const EstimateForm = () => {
     carModelRef,
   ];
 
-  const [shopID, setShopID] = useQueryParam("shopid", StringParam);
+  const paramData = useParams();
+  const shopId = paramData.shop_id;
   const [shopData, setShopData] = useState(false);
   const [selectedImage, setSelectedImage] = useState(false);
   const [blankForm, setBlankForm] = useState(true);
@@ -67,12 +68,12 @@ const EstimateForm = () => {
   }, [photos]);
 
   useEffect(() => {
-    if (shopID) getShopData();
+    if (shopId) getShopData();
   }, []);
 
   const getShopData = () => {
     db.collection("shops")
-      .doc(shopID)
+      .doc(shopId)
       .get()
       .then((doc) => {
         setShopData(doc.data());
@@ -97,7 +98,6 @@ const EstimateForm = () => {
   };
   const addUser = () => {
     sendEmail();
-    
     // eslint-disable-next-line no-unused-vars
     const userRef = db
       .collection("requested")
@@ -109,7 +109,7 @@ const EstimateForm = () => {
         carYear,
         carMake,
         carModel,
-        shopID,
+        shopID: shopId,
       })
       .finally(() => {
         setDisplayForm(false);
