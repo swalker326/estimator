@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   changeBannerButton: {
     position: "absolute",
-    top: "50%",
+    top: "40%",
     left: "50%",
   },
   editButton: {
@@ -48,9 +48,12 @@ const useStyles = makeStyles((theme) => ({
   bannerImageContainer: {
     display: "flex",
     justifyContent: "center",
+    maxHeight: "200px",
+    position: "relative",
   },
   bannerImage: {
-    maxHeight: "150px",
+    objectFit: "cover",
+    flexShrink: 0,
   },
   editIconContainer: {
     display: "flex",
@@ -61,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Settings = (props) => {
-  console.log("Settings Rendered"); // eslint-disable-line
   const classes = useStyles();
   const b64toBlob = (dataURI) => {
     console.log("dataURI", dataURI); // eslint-disable-line
@@ -91,7 +93,6 @@ const Settings = (props) => {
   const [formData, setFormData] = useState({});
   const [editing, setEditing] = useState(false);
   const [state, dispatch] = useContext(Context);
-  const { url } = useRouteMatch();
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
