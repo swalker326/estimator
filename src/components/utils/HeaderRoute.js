@@ -1,22 +1,18 @@
-import React, { useContext } from "react";
-import { Context } from "../../state/store";
+import React from "react";
 import Header from "../Header";
-import { Redirect, Route } from "react-router";
+import { Route } from "react-router";
 
 const PrivateRoute = ({ children, ...rest }) => {
-  const [state] = useContext(Context);
 
   return (
     <Route
       {...rest}
       render={() => {
-        return state.auth === true ? (
+        return (
           <div>
             <Header />
             {children}
           </div>
-        ) : (
-          <Redirect to="/login" />
         );
       }}
     />
