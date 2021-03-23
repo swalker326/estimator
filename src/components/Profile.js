@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../state/store";
 import QuoteList from "./QuoteList";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import { useParams } from "react-router-dom";
 import { db } from "../server/firestore";
@@ -29,10 +30,22 @@ const useStyles = makeStyles({
   profileCompanyName: {
     margin: "8px",
   },
+  loadingContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems:"center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    position: "absolute",
+    top: 0,
+    height:"100%",
+    width: "100%",
+  }
 });
 
 const Profile = (props) => {
   const [state, dispatch] = useContext(Context);
+  const [loading, setLoading] = useState(false);
+
   const paramData = useParams();
   const shopId = state.shopId;
   const setShopData = (data) => {
@@ -64,10 +77,12 @@ const Profile = (props) => {
           docData.id = doc.id;
           setRequests((oldRequests) => [...oldRequests, docData]);
         });
+        setTimeout(() => setLoading(false), 500);
       });
   };
   useEffect(() => {
     dispatch({ type: "SET_SHOP", shopId: paramData.id, shopData: null });
+    setLoading(true);
   }, []);
   useEffect(() => {
     if (shopId) {
@@ -79,12 +94,17 @@ const Profile = (props) => {
   return (
     <div className="Profile">
       <div className={classes.content}>
-          {requests ? 
-          <QuoteList
-            requests={requests}
-            getShopRequests={getShopRequests}
-          /> : <div>No requests =( tell people to submit requests</div>
-          }
+        {loading ? (
+          <div className={classes.loadingContainer}>
+            <CircularProgress size={100} />
+          </div>
+        ) : requests ? (
+          <QuoteList requests={requests} getShopRequests={getShopRequests} />
+        ) : (
+          <div>
+            No requests = tell people to submit requests on your website!
+          </div>
+        )}
       </div>
     </div>
   );

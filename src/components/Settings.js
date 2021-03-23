@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   changeBannerButton: {
     position: "absolute",
-    top: "50%",
+    top: "40%",
     left: "50%",
   },
   editButton: {
@@ -48,6 +48,12 @@ const useStyles = makeStyles((theme) => ({
   bannerImageContainer: {
     display: "flex",
     justifyContent: "center",
+    maxHeight: "200px",
+    position: "relative",
+  },
+  bannerImage: {
+    objectFit: "cover",
+    flexShrink: 0,
   },
   editIconContainer: {
     display: "flex",
@@ -58,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Settings = (props) => {
-  console.log("Settings Rendered"); // eslint-disable-line
   const classes = useStyles();
   const b64toBlob = (dataURI) => {
     console.log("dataURI", dataURI); // eslint-disable-line
@@ -88,21 +93,20 @@ const Settings = (props) => {
   const [formData, setFormData] = useState({});
   const [editing, setEditing] = useState(false);
   const [state, dispatch] = useContext(Context);
-  const { url } = useRouteMatch();
   const handleInputChange = (e) => {
-    setFormData ({
+    setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
   const handleSettingsSave = () => {
     console.log("handleSettings fired"); // eslint-disable-line
     db.collection("shops")
-    .doc(state.shopId)
-    .update({
-      ...formData
-    })
-  }
+      .doc(state.shopId)
+      .update({
+        ...formData,
+      });
+  };
   const updateUserDetails = (e) => {
     e.preventDefault();
     handleSettingsSave();
@@ -115,11 +119,11 @@ const Settings = (props) => {
           setFormData({
             ...formData,
             shop_banner: photo,
-          })
-        })
-      })
+          });
+        });
+      });
     }
-  }, [files])
+  }, [files]);
   return (
     <div className="Settings">
       <div>
@@ -142,6 +146,7 @@ const Settings = (props) => {
           <h3>Banner</h3>
           <div className={classes.bannerImageContainer}>
             <img
+              className={classes.bannerImage}
               src={
                 files[0]
                   ? URL.createObjectURL(files[0])
@@ -167,7 +172,9 @@ const Settings = (props) => {
           id="outlined-basic"
           onChange={handleInputChange}
           className={classes.textField}
-          value={formData.shop_name ? formData.shop_name : state.shopData.shop_name}
+          value={
+            formData.shop_name ? formData.shop_name : state.shopData.shop_name
+          }
           variant="outlined"
         ></TextField>
         <TextField
@@ -177,7 +184,11 @@ const Settings = (props) => {
           label="Shop Email"
           id="outlined-basic"
           className={classes.textField}
-          value={formData.shop_email ? formData.shop_email : state.shopData.shop_email}
+          value={
+            formData.shop_email
+              ? formData.shop_email
+              : state.shopData.shop_email
+          }
           variant="outlined"
         ></TextField>
         <div className={classes.buttonGroup}>
@@ -190,7 +201,7 @@ const Settings = (props) => {
               color="primary"
               className={classes.button}
               type="submit"
-              onClick = {handleSettingsSave}
+              onClick={handleSettingsSave}
             >
               Save
             </Button>

@@ -134,8 +134,8 @@ const Header = (props) => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
+        <IconButton aria-label="show new notifications" color="inherit">
+          <Badge badgeContent={state.shopData?.notifications} color="secondary">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -171,8 +171,8 @@ const Header = (props) => {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
+            <IconButton aria-label="show new notifications" color="inherit">
+              <Badge badgeContent={state.shopData?.notifications} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
