@@ -22,7 +22,7 @@ const OpenModal = (props) => {
     setSelectedImage(selectedImage)
     openModal(imgRef);
   }
-  return <img ref={imgRef} onClick={handleClick} {...props} alt="damage" />;
+  return <img style={{boxShadow: "5px 3px 5px 0px #898989"}} ref={imgRef} onClick={handleClick} {...props} alt="damage" />;
 };
 
 const Request = (props) => {
