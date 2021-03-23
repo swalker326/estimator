@@ -3,10 +3,13 @@ import { Context } from "../state/store";
 import { TextField, makeStyles, Button } from "@material-ui/core";
 import { auth } from "../server/firestore";
 import NewAccount from "./NewAccount";
+import { Redirect } from "react-router";
 
 const Login = (props) => {
   const [state, dispatch] = useContext(Context);
   const [errors, setErrors] = useState([]);
+  const [forgotPassword, setForgotPassword] = useState(false);
+  
   const [formData, setFormData] = useState(false);
   const [createAccount, setCreateAccount] = useState(false);
 
@@ -49,6 +52,8 @@ const Login = (props) => {
         console.error("errorMessage", errorMessage); // eslint-disable-line
       });
   };
+  if (forgotPassword) return <Redirect to="/password_reset" />
+
   return (
     <div className="Login">
       {createAccount ? (
@@ -88,13 +93,17 @@ const Login = (props) => {
               />
               <Button
                 className={classes.button}
-                variant="outlined"
+                variant="contained"
+                color="primary"
                 onClick={() => signUserIn()}
               >
                 Sign In
               </Button>
-              <Button onClick={() => setCreateAccount(true)}>
+              <Button className={classes.buttonOutline} variant="outlined" color="primary" onClick={() => setCreateAccount(true)}>
                 Create Account
+              </Button>
+              <Button className={classes.buttonOutline} variant="outlined" color="primary" onClick={() => setForgotPassword(true)}>
+                Forgot Password
               </Button>
             </form>
           </div>
@@ -114,6 +123,9 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: "1rem",
     marginBottom: "1rem",
+  },
+  buttonOutline: {
+    marginTop: ".5rem",
   },
   error: {
     color: "red",
