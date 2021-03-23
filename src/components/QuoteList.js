@@ -43,7 +43,6 @@ const QuoteList = (props) => {
       .doc(id)
       .delete()
       .then((doc) => {
-        console.log("Doc Removed"); // eslint-disable-line
         props.getShopRequests();
       });
   };

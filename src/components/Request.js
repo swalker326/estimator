@@ -27,7 +27,7 @@ const OpenModal = (props) => {
 
 const Request = (props) => {
   const [state, dispatch] = useContext(Context);
-  const requestID = useParams();
+  const requestId = useParams().request_id;
   const [requestData, setRequestData] = useState(false);
   const { modalProps, open } = useModal({
     background: 'rgba(0,0,0,0.7)',
@@ -35,13 +35,13 @@ const Request = (props) => {
 
   const getRequestData = () => {
     db.collection("requested")
-      .doc(requestID.id)
+      .doc(requestId)
       .get()
       .then((doc) => setRequestData(doc.data()));
   };
   useEffect(() => {
     getRequestData();
-  }, [requestID]);
+  }, [requestId]);
 
   const [selectedImage, setSelectedImage] = useState(false);
 

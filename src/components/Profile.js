@@ -49,7 +49,7 @@ const Profile = (props) => {
   const paramData = useParams();
   const shopId = state.shopId;
   const setShopData = (data) => {
-    dispatch({ type: "SET_SHOP", shopId: paramData.id, shopData: data });
+    dispatch({ type: "SET_SHOP", shopId: paramData.shop_id, shopData: data });
   };
   const [requests, setRequests] = useState([]);
 
@@ -81,7 +81,7 @@ const Profile = (props) => {
       });
   };
   useEffect(() => {
-    dispatch({ type: "SET_SHOP", shopId: paramData.id, shopData: null });
+    dispatch({ type: "SET_SHOP", shopId: paramData.shop_id, shopData: null });
     setLoading(true);
   }, []);
   useEffect(() => {
