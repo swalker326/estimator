@@ -1,5 +1,5 @@
 import React, { useState, useRef, useContext } from "react";
-import {Context} from '../state/store';
+import { Context } from "../state/store";
 import { TextField, makeStyles, Button } from "@material-ui/core";
 import { auth } from "../server/firestore";
 import NewAccount from "./NewAccount";
@@ -15,14 +15,14 @@ const Login = (props) => {
   const classes = useStyles();
 
   const setLoginError = (value) => {
-    dispatch({type: 'SET_ERROR', loginError: value})
-  }
+    dispatch({ type: "SET_ERROR", loginError: value });
+  };
   const setUser = (user) => {
-    dispatch({type: 'SET_USER', user: user})
-  }
+    dispatch({ type: "SET_USER", user: user });
+  };
   const setAuth = (auth) => {
-    dispatch({type: 'SET_AUTH', auth: auth})
-  }
+    dispatch({ type: "SET_AUTH", auth: auth });
+  };
 
   const validateField = () => {};
   const handleInputChange = (e) => {
@@ -37,13 +37,13 @@ const Login = (props) => {
       .signInWithEmailAndPassword(formData.emailAddress, formData.password)
       .then((userCred) => {
         setUser(userCred.user);
-        setAuth(true)
+        setAuth(true);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         if (errorCode) {
-          setLoginError(true)
+          setLoginError(true);
         }
         console.error("errorCode", errorCode); // eslint-disable-line
         console.error("errorMessage", errorMessage); // eslint-disable-line
@@ -57,9 +57,9 @@ const Login = (props) => {
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div>
             <h2 style={{ textAlign: "center" }}> Sign In</h2>
-              <div className={classes.error}>
-                { state.loginError ? "Incorrect username or password" : ""}
-              </div>
+            <div className={classes.error}>
+              {state.loginError ? "Incorrect username or password" : ""}
+            </div>
             <form style={{ display: "flex", flexDirection: "column" }}>
               <TextField
                 name="emailAddress"
@@ -119,7 +119,7 @@ const useStyles = makeStyles((theme) => ({
     color: "red",
     padding: "12px",
     height: "20px",
-  }
+  },
 }));
 
 export default Login;
