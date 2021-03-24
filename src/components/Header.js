@@ -24,10 +24,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   title: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-    },
+    display: "block",
   },
   search: {
     position: "relative",
@@ -131,53 +128,54 @@ const Header = (props) => {
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      {state.auth ? (
-        <div>
-          <MenuItem>
-            <IconButton aria-label="show new notifications" color="inherit">
-              <Badge
-                badgeContent={state.shopData?.notifications}
-                color="secondary"
-              >
-                <NotificationsIcon />
-              </Badge>
+    <div>
+      <Menu
+        anchorEl={mobileMoreAnchorEl}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        id={mobileMenuId}
+        keepMounted
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isMobileMenuOpen}
+        onClose={handleMobileMenuClose}
+      >
+        {state.auth ? (
+          <div>
+            <MenuItem>
+              <IconButton aria-label="show new notifications" color="inherit">
+                <Badge
+                  badgeContent={state.shopData?.notifications}
+                  color="secondary"
+                >
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <p>Notifications</p>
+            </MenuItem>
+            <MenuItem>
+              <Link to={`/profile/settings/${state.shopId}`}>
+                <div style={{ display: "flex" }}>
+                  <IconButton aria-label="log current user out" color="inherit">
+                    <SettingsIcon />
+                  </IconButton>
+                  <p>Settings</p>
+                </div>
+              </Link>
+            </MenuItem>
+          </div>
+        ) : null}
+        <MenuItem onClick={state.auth ? logUserOut : () => null}>
+          <div style={{ display: "flex" }}>
+            <IconButton
+              aria-label="account of current user"
+              color="inherit"
+            >
+              <ExitToApp />
             </IconButton>
-            <p>Notifications</p>
-          </MenuItem>
-          <MenuItem>
-            <Link to={`/profile/settings/${state.shopId}`}>
-              <div style={{ display: "flex" }}>
-                <IconButton aria-label="log current user out" color="inherit">
-                  <SettingsIcon />
-                </IconButton>
-                <p>Settings</p>
-              </div>
-            </Link>
-          </MenuItem>
-        </div>
-      ) : null}
-      <MenuItem>
-        <div style={{ display: "flex" }}>
-          <IconButton
-            onClick={state.auth ? logUserOut : () => null}
-            aria-label="account of current user"
-            color="inherit"
-          >
-            <ExitToApp />
-          </IconButton>
-          <p>Profile</p>
-        </div>
-      </MenuItem>
-    </Menu>
+            <p>Profile</p>
+          </div>
+        </MenuItem>
+      </Menu>
+    </div>
   );
 
   return (
