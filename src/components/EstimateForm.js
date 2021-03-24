@@ -171,7 +171,7 @@ const EstimateForm = () => {
 
   return (
     <div className={classes.root}>
-      <Banner banner={shopData.shop_banner} />
+      <Banner banner={shopData.shop_banner} url={shopData.shop_website} />
       <Backdrop className={classes.backdrop} open={loading}>
         <CircularProgress className={classes.loadingIcon} />
       </Backdrop>
