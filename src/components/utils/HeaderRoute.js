@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../Header";
 import { Route } from "react-router";
 
-const PrivateRoute = ({ children, ...rest }) => {
+const HeaderRoute = ({ children, ...rest }) => {
 
   return (
     <Route
@@ -19,4 +19,4 @@ const PrivateRoute = ({ children, ...rest }) => {
   );
 };
 
-export default PrivateRoute;
+export default HeaderRoute;
