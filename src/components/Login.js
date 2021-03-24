@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { Context } from "../state/store";
 import { TextField, makeStyles, Button } from "@material-ui/core";
 import { auth } from "../server/firestore";
@@ -39,6 +39,7 @@ const Login = (props) => {
     auth
       .signInWithEmailAndPassword(formData.emailAddress, formData.password)
       .then((userCred) => {
+        console.log("userCred.user", userCred.user); // eslint-disable-line
         setUser(userCred.user);
         setAuth(true);
       })
@@ -52,6 +53,17 @@ const Login = (props) => {
         console.error("errorMessage", errorMessage); // eslint-disable-line
       });
   };
+  const checkUserAuth = () => {
+    if (auth.currentUser) {
+      setUser(auth.currentUser);
+      setAuth(true);
+    }
+  }
+
+  useEffect(() => {
+    checkUserAuth();
+  }, [])
+
   if (forgotPassword) return <Redirect to="/password_reset" />
 
   return (
