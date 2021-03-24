@@ -13,6 +13,7 @@ import { Link, useRouteMatch } from "react-router-dom";
 import DeleteIcon from "@material-ui/icons/Delete";
 import MenuIcon from "@material-ui/icons/Menu";
 import SimpleDialog from "./utils/SimpleDialog";
+import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles({
   root: {
@@ -69,7 +70,6 @@ const QuoteList = (props) => {
                     <CardMedia
                       className={classes.media}
                       image={request.images[0]}
-                      // title="Contemplative Reptile"
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="h2">
@@ -116,6 +116,22 @@ const QuoteList = (props) => {
             );
           })
         : null}
+      <Card className={classes.root}>
+        <CardActionArea style={{ height: "100%" }}>
+          <Link to={`/profile/form/${state.shopId}`}>
+            <div
+              style={{
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <AddIcon style={{ fontSize: 70 }} />
+            </div>
+          </Link>
+        </CardActionArea>
+      </Card>
     </div>
   );
 };
