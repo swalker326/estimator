@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../state/store";
 import QuoteList from "./QuoteList";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useParams } from "react-router-dom";
 import { db } from "../server/firestore";
@@ -37,6 +38,7 @@ const useStyles = makeStyles({
     backgroundColor: "rgba(0,0,0,0.5)",
     position: "absolute",
     top: 0,
+    left: 0,
     height:"100%",
     width: "100%",
   }
@@ -82,17 +84,17 @@ const Profile = (props) => {
   };
   useEffect(() => {
     dispatch({ type: "SET_SHOP", shopId: paramData.shop_id, shopData: null });
-    setLoading(true);
   }, []);
   useEffect(() => {
     if (shopId) {
       getShopRequests();
       getShopData();
+      setLoading(true);
     }
   }, [shopId]);
 
   return (
-    <div className="Profile">
+    <Container maxWidth="md" className="Profile">
       <div className={classes.content}>
         {loading ? (
           <div className={classes.loadingContainer}>
@@ -106,7 +108,7 @@ const Profile = (props) => {
           </div>
         )}
       </div>
-    </div>
+    </Container>
   );
 };
 
