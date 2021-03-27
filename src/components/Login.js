@@ -35,7 +35,8 @@ const Login = (props) => {
     });
     setLoginError(false);
   };
-  const signUserIn = () => {
+  const signUserIn = (event) => {
+    event.preventDefault()
     auth
       .signInWithEmailAndPassword(formData.emailAddress, formData.password)
       .then((userCred) => {
@@ -77,7 +78,7 @@ const Login = (props) => {
             <div className={classes.error}>
               {state.loginError ? "Incorrect username or password" : ""}
             </div>
-            <form style={{ display: "flex", flexDirection: "column" }}>
+            <form style={{ display: "flex", flexDirection: "column" }} onSubmit = {(e) => signUserIn(e)}>
               <TextField
                 name="emailAddress"
                 ref={emailAddressRef}
@@ -107,7 +108,7 @@ const Login = (props) => {
                 className={classes.button}
                 variant="contained"
                 color="primary"
-                onClick={() => signUserIn()}
+                type="submit"
               >
                 Sign In
               </Button>
