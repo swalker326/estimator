@@ -17,7 +17,8 @@ import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles({
   root: {
-    minWidth: "20%",
+    width: "20%",
+    minWidth: "170px",
     marginRight: "1rem",
     marginLeft: "1rem",
     marginBottom: "1.5rem",
@@ -52,7 +53,7 @@ const QuoteList = (props) => {
   };
 
   return (
-    <div className="QuoteList" style={{ display: "flex", flexWrap: "wrap" }}>
+    <div className="QuoteList" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
       {requests
         ? requests.map((request) => {
             return (
