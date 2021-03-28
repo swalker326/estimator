@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { TextField, makeStyles, Button } from "@material-ui/core";
+import { Container, TextField, makeStyles, Button } from "@material-ui/core";
 import { auth, db } from "../server/firestore";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -20,7 +20,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={2}>
-          <Typography>{children}</Typography>
+          <Typography component={"span"}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -40,6 +40,7 @@ const NewAccount = (props) => {
   const lastNameRef = useRef(null);
   const shopNameRef = useRef(null);
   const shopWebsiteRef = useRef(null);
+  const [accountCreated, setAccountCreated] = useState(false);
 
   const [errors, setErrors] = useState([]);
   const [formData, setFormData] = useState(false);
@@ -61,6 +62,8 @@ const NewAccount = (props) => {
     auth
       .createUserWithEmailAndPassword(formData.emailAddress, formData.password)
       .then((userCred) => {
+        userCred.user.sendEmailVerification();
+        setAccountCreated(true);
         setUser(userCred.user);
         if (value === 1) {
           db.collection("shops").add({
@@ -70,7 +73,7 @@ const NewAccount = (props) => {
             shop_email: formData.emailAddress,
             shop_website: formData.shop_website,
             email: formData.emailAddress,
-            user: userCred.user.uid
+            user: userCred.user.uid,
           });
         }
       })
@@ -82,192 +85,207 @@ const NewAccount = (props) => {
       });
   };
   return (
-    <div className="NewAccount">
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <div className={classes.container}>
-          <h2 style={{ textAlign: "center" }}>Create Account</h2>
-          <Paper className={classes.paper} elevation={3}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              indicatorColor="primary"
-            >
-              <Tab label="Customer Account" {...a11yProps(0)} />
-              <Tab label="Shop Account" {...a11yProps(1)} />
-            </Tabs>
-          </Paper>
+    <Container maxWidth="sm" className="NewAccount">
+      {accountCreated ? (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <h2 style={{textAlign:"center"}}>
+            We've sent you an email to verify you account. You can login now, but don't forget to confirm your email!
+          </h2>
+          <Button
+            variant="outlined"
+            className={classes.button}
+            onClick={() => setCreateAccount(false)}
+          >
+            Back to Sign In
+          </Button>
+        </div>
+      ) : (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <div className={classes.container}>
+            <h2 style={{ textAlign: "center" }}>Create Account</h2>
+            <Paper className={classes.paper} elevation={3}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                indicatorColor="primary"
+              >
+                <Tab label="Customer Account" {...a11yProps(0)} />
+                <Tab label="Shop Account" {...a11yProps(1)} />
+              </Tabs>
+            </Paper>
 
-          <TabPanel value={value} index={0}>
-            <form className={classes.form}>
-              <h4 className={classes.h4}>Account Details</h4>
-              <TextField
-                name="emailAddress"
-                ref={emailAddressRef}
-                className={classes.textField}
-                // id="outlined-basic"
-                error={errors.includes("emailAddress")}
-                onBlur={(e) => validateField(e.target)}
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                label="Email Address"
+            <TabPanel value={value} index={0}>
+              <form className={classes.form}>
+                <h4 className={classes.h4}>Account Details</h4>
+                <TextField
+                  name="emailAddress"
+                  ref={emailAddressRef}
+                  className={classes.textField}
+                  // id="outlined-basic"
+                  error={errors.includes("emailAddress")}
+                  onBlur={(e) => validateField(e.target)}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  label="Email Address"
+                  variant="outlined"
+                />
+                <TextField
+                  name="password"
+                  ref={passwordRef}
+                  className={classes.textField}
+                  // id="outlined-basic"
+                  type="password"
+                  error={errors.includes("password")}
+                  onBlur={(e) => validateField(e.target)}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  label="Password"
+                  variant="outlined"
+                />
+                <h4 className={classes.h4}>Contact Info</h4>
+                <TextField
+                  name="first_name"
+                  ref={firstNameRef}
+                  className={classes.textField}
+                  // id="outlined-basic"
+                  type="text"
+                  error={errors.includes("first_name")}
+                  onBlur={(e) => validateField(e.target)}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  label="First Name"
+                  variant="outlined"
+                />
+                <TextField
+                  name="last_name"
+                  ref={lastNameRef}
+                  className={classes.textField}
+                  // id="outlined-basic"
+                  type="text"
+                  error={errors.includes("last_name")}
+                  onBlur={(e) => validateField(e.target)}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  label="Last Name"
+                  variant="outlined"
+                />
+              </form>
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <form className={classes.form}>
+                <h4 className={classes.h4}>Account Details</h4>
+                <TextField
+                  name="emailAddress"
+                  ref={emailAddressRef}
+                  className={classes.textField}
+                  // id="outlined-basic"
+                  error={errors.includes("emailAddress")}
+                  onBlur={(e) => validateField(e.target)}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  label="Email Address"
+                  variant="outlined"
+                />
+                <TextField
+                  name="password"
+                  ref={passwordRef}
+                  className={classes.textField}
+                  // id="outlined-basic"
+                  type="password"
+                  error={errors.includes("password")}
+                  onBlur={(e) => validateField(e.target)}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  label="Password"
+                  variant="outlined"
+                />
+                <h4 className={classes.h4}>Contact Info</h4>
+                <TextField
+                  name="first_name"
+                  ref={firstNameRef}
+                  className={classes.textField}
+                  // id="outlined-basic"
+                  type="text"
+                  error={errors.includes("first_name")}
+                  onBlur={(e) => validateField(e.target)}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  label="First Name"
+                  variant="outlined"
+                />
+                <TextField
+                  name="last_name"
+                  ref={lastNameRef}
+                  className={classes.textField}
+                  // id="outlined-basic"
+                  type="text"
+                  error={errors.includes("last_name")}
+                  onBlur={(e) => validateField(e.target)}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  label="Last Name"
+                  variant="outlined"
+                />
+                <h4 className={classes.h4}>Shop Details</h4>
+                <TextField
+                  name="shop_name"
+                  ref={shopNameRef}
+                  className={classes.textField}
+                  // id="outlined-basic"
+                  type="text"
+                  error={errors.includes("shop_name")}
+                  onBlur={(e) => validateField(e.target)}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  label="Shop Name"
+                  variant="outlined"
+                />
+                <TextField
+                  name="shop_website"
+                  ref={shopWebsiteRef}
+                  className={classes.textField}
+                  // id="outlined-basic"
+                  type="text"
+                  error={errors.includes("shop_website")}
+                  onBlur={(e) => validateField(e.target)}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                  }}
+                  label="Shop Website"
+                  variant="outlined"
+                />
+              </form>
+            </TabPanel>
+            <div className={classes.buttonGroup}>
+              <Button
                 variant="outlined"
-              />
-              <TextField
-                name="password"
-                ref={passwordRef}
-                className={classes.textField}
-                // id="outlined-basic"
-                type="password"
-                error={errors.includes("password")}
-                onBlur={(e) => validateField(e.target)}
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                label="Password"
-                variant="outlined"
-              />
-              <h4 className={classes.h4}>Contact Info</h4>
-              <TextField
-                name="first_name"
-                ref={firstNameRef}
-                className={classes.textField}
-                // id="outlined-basic"
-                type="text"
-                error={errors.includes("first_name")}
-                onBlur={(e) => validateField(e.target)}
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                label="First Name"
-                variant="outlined"
-              />
-              <TextField
-                name="last_name"
-                ref={lastNameRef}
-                className={classes.textField}
-                // id="outlined-basic"
-                type="text"
-                error={errors.includes("last_name")}
-                onBlur={(e) => validateField(e.target)}
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                label="Last Name"
-                variant="outlined"
-              />
-            </form>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <form className={classes.form}>
-              <h4 className={classes.h4}>Account Details</h4>
-              <TextField
-                name="emailAddress"
-                ref={emailAddressRef}
-                className={classes.textField}
-                // id="outlined-basic"
-                error={errors.includes("emailAddress")}
-                onBlur={(e) => validateField(e.target)}
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                label="Email Address"
-                variant="outlined"
-              />
-              <TextField
-                name="password"
-                ref={passwordRef}
-                className={classes.textField}
-                // id="outlined-basic"
-                type="password"
-                error={errors.includes("password")}
-                onBlur={(e) => validateField(e.target)}
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                label="Password"
-                variant="outlined"
-              />
-              <h4 className={classes.h4}>Contact Info</h4>
-              <TextField
-                name="first_name"
-                ref={firstNameRef}
-                className={classes.textField}
-                // id="outlined-basic"
-                type="text"
-                error={errors.includes("first_name")}
-                onBlur={(e) => validateField(e.target)}
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                label="First Name"
-                variant="outlined"
-              />
-              <TextField
-                name="last_name"
-                ref={lastNameRef}
-                className={classes.textField}
-                // id="outlined-basic"
-                type="text"
-                error={errors.includes("last_name")}
-                onBlur={(e) => validateField(e.target)}
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                label="Last Name"
-                variant="outlined"
-              />
-              <h4 className={classes.h4}>Shop Details</h4>
-              <TextField
-                name="shop_name"
-                ref={shopNameRef}
-                className={classes.textField}
-                // id="outlined-basic"
-                type="text"
-                error={errors.includes("shop_name")}
-                onBlur={(e) => validateField(e.target)}
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                label="Shop Name"
-                variant="outlined"
-              />
-              <TextField
-                name="shop_website"
-                ref={shopWebsiteRef}
-                className={classes.textField}
-                // id="outlined-basic"
-                type="text"
-                error={errors.includes("shop_website")}
-                onBlur={(e) => validateField(e.target)}
-                onChange={(e) => {
-                  handleInputChange(e);
-                }}
-                label="Shop Website"
-                variant="outlined"
-              />
-            </form>
-          </TabPanel>
-          <div className={classes.buttonGroup}>
-            <Button
-              variant="outlined"
-              className={classes.button}
-              onClick={() => setCreateAccount(false)}
-            >
-              Back to Sign In
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              onClick={() => addNewUser()}
-            >
-              Create Account
-            </Button>
+                className={classes.button}
+                onClick={() => setCreateAccount(false)}
+              >
+                Back to Sign In
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={() => addNewUser()}
+              >
+                Create Account
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </Container>
   );
 };
 

@@ -50,9 +50,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     maxHeight: "200px",
     position: "relative",
+    overflow: "hidden",
   },
   bannerImage: {
-    objectFit: "cover",
+    objectFit: "contain",
     flexShrink: 0,
   },
   editIconContainer: {
@@ -189,9 +190,21 @@ const Settings = (props) => {
           }
           variant="outlined"
         ></TextField>
+        <TextField
+          disabled={!editing}
+          name="shop_website"
+          label="Shop Website"
+          id="outlined-basic"
+          onChange={handleInputChange}
+          className={classes.textField}
+          value={
+            formData.shop_website ? formData.shop_website : state.shopData.shop_website
+          }
+          variant="outlined"
+        ></TextField>
         <div className={classes.buttonGroup}>
           <Button variant="outlined" className={classes.button}>
-            <Link to={`/profile/form/${state.shopId}`}>Preview Form</Link>
+            <Link target="_blank" to={`/profile/form/${state.shopId}`}>Preview Form</Link>
           </Button>
           {editing ? (
             <Button

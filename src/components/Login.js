@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { Context } from "../state/store";
 import { TextField, makeStyles, Button } from "@material-ui/core";
 import { auth } from "../server/firestore";
@@ -35,10 +35,12 @@ const Login = (props) => {
     });
     setLoginError(false);
   };
-  const signUserIn = () => {
+  const signUserIn = (event) => {
+    event.preventDefault()
     auth
       .signInWithEmailAndPassword(formData.emailAddress, formData.password)
       .then((userCred) => {
+        console.log("userCred.user", userCred.user); // eslint-disable-line
         setUser(userCred.user);
         setAuth(true);
       })
@@ -52,6 +54,17 @@ const Login = (props) => {
         console.error("errorMessage", errorMessage); // eslint-disable-line
       });
   };
+  const checkUserAuth = () => {
+    if (auth.currentUser) {
+      setUser(auth.currentUser);
+      setAuth(true);
+    }
+  }
+
+  useEffect(() => {
+    checkUserAuth();
+  }, [])
+
   if (forgotPassword) return <Redirect to="/password_reset" />
 
   return (
@@ -65,7 +78,7 @@ const Login = (props) => {
             <div className={classes.error}>
               {state.loginError ? "Incorrect username or password" : ""}
             </div>
-            <form style={{ display: "flex", flexDirection: "column" }}>
+            <form style={{ display: "flex", flexDirection: "column" }} onSubmit = {(e) => signUserIn(e)}>
               <TextField
                 name="emailAddress"
                 ref={emailAddressRef}
@@ -95,7 +108,7 @@ const Login = (props) => {
                 className={classes.button}
                 variant="contained"
                 color="primary"
-                onClick={() => signUserIn()}
+                type="submit"
               >
                 Sign In
               </Button>
