@@ -136,7 +136,13 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "2rem",
   },
   image: {
-    maxWidth: "20%",
+    maxWidth: "40%",
+    [theme.breakpoints.up("md")]: {
+      maxWidth: "30%",
+    },
+    [theme.breakpoints.up("lg")]: {
+      maxWidth: "20%",
+    },
     borderRadius: "6px",
     objectFit: "cover",
     marginLeft: "1rem",
