@@ -15,26 +15,6 @@ import MenuIcon from "@material-ui/icons/Menu";
 import SimpleDialog from "./utils/SimpleDialog";
 import AddIcon from "@material-ui/icons/Add";
 
-const useStyles = makeStyles({
-  root: {
-    width: "20%",
-    minWidth: "170px",
-    marginRight: "1rem",
-    marginLeft: "1rem",
-    marginBottom: "1.5rem",
-  },
-  media: {
-    height: 140,
-  },
-  deleteButtonContainer: {
-    float: "right",
-  },
-  cardButtons: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-});
-
 const QuoteList = (props) => {
   const { url } = useRouteMatch();
   const [state, dispatch] = useContext(Context);
@@ -138,3 +118,23 @@ const QuoteList = (props) => {
 };
 
 export default QuoteList;
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "20%",
+    minWidth: "170px",
+    marginRight: "1rem",
+    marginLeft: "1rem",
+    marginBottom: "1.5rem",
+  },
+  media: {
+    height: 140,
+  },
+  deleteButtonContainer: {
+    float: "right",
+  },
+  cardButtons: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+}));
