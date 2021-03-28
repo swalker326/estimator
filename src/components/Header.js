@@ -106,7 +106,7 @@ const Header = (props) => {
             >
               <ExitToApp />
             </IconButton>
-            <p>Profile</p>
+            <p>Logout</p>
           </div>
         </MenuItem>
       </Menu>
