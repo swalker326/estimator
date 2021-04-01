@@ -4,6 +4,7 @@ import Submitted from "./Submitted";
 import { getMakes, getModels } from "../server/carData";
 import SelectedImage from "./SelectedImage";
 import {
+  Container,
   Grid,
   TextField,
   MenuItem,
@@ -96,11 +97,12 @@ const EstimateForm = () => {
       { ...formData, shop_email: shopData.shop_email }
     );
   };
-  const addUser = () => {
+  const addRequest = () => {
     sendEmail();
+    const date = Date.now();
+    console.log("date", date); // eslint-disable-line
     // eslint-disable-next-line no-unused-vars
-    const userRef = db
-      .collection("requested")
+    db.collection("requested")
       .add({
         first_name: formData.firstName,
         last_name: formData.lastName,
@@ -110,6 +112,7 @@ const EstimateForm = () => {
         carMake,
         carModel,
         shopID: shopId,
+        createDate: date,
       })
       .finally(() => {
         setDisplayForm(false);
@@ -160,7 +163,7 @@ const EstimateForm = () => {
       validateField(field.current.querySelector("input"));
     });
     if (errors.length === 0 && !blankForm) {
-      addUser();
+      addRequest();
     }
   };
   const hideLoading = () => {
@@ -170,7 +173,7 @@ const EstimateForm = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <Container className={classes.root}>
       <Banner banner={shopData.shop_banner} url={shopData.shop_website} />
       <Backdrop className={classes.backdrop} open={loading}>
         <CircularProgress className={classes.loadingIcon} />
@@ -191,7 +194,7 @@ const EstimateForm = () => {
               noValidate
               autoComplete="off"
             >
-              <div style={{display: "flex", justifyContent:"center"}}>
+              <div className={classes.formContent}>
                 <Grid direction="column" spacing={2}>
                   <Grid item>
                     <div className={classes.headerRow}>
@@ -262,7 +265,7 @@ const EstimateForm = () => {
                     >
                       {Years.years.map((option, index) => (
                         <MenuItem
-                          style={{ maxHeight: "20px" }}
+                          className={classes.menuItem}
                           key={index}
                           value={option}
                         >
@@ -290,7 +293,7 @@ const EstimateForm = () => {
                     >
                       {makeOptions.map((make, index) => (
                         <MenuItem
-                          style={{ maxHeight: "20px" }}
+                          className={classes.menuItem}
                           key={index}
                           value={make}
                         >
@@ -318,7 +321,7 @@ const EstimateForm = () => {
                     >
                       {modelOptions.map((make, index) => (
                         <MenuItem
-                          style={{ maxHeight: "20px" }}
+                          className={classes.menuItem}
                           key={index}
                           value={make}
                         >
@@ -348,7 +351,7 @@ const EstimateForm = () => {
             </div>
             <div className={classes.buttonWrapper}>
               <Fab
-                style={{ color: "white", backgroundColor: "black" }}
+                className={classes.faButton}
                 size="large"
                 form="EstimateForm"
                 type="submit"
@@ -363,7 +366,7 @@ const EstimateForm = () => {
       ) : (
         <Submitted />
       )}
-    </div>
+    </Container>
   );
 };
 
@@ -379,7 +382,12 @@ const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: 100,
   },
-  form: {
+  faButton: {
+    color: "white",
+    backgroundColor: "black",
+  },
+  menuItem: {
+    maxHeight: "20px"
   },
   vehiclePhotos: {
     display: "flex",
@@ -408,6 +416,10 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: "4%",
     marginBottom: "4%",
     justifyContent: "flex-end",
+  },
+  formContent: {
+    display: "flex",
+    justifyContent: "center",
   },
 }));
 
