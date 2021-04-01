@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { db } from "../server/firestore";
-import { makeStyles } from "@material-ui/core/styles";
+import { Container, makeStyles } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -18,9 +18,11 @@ import AddIcon from "@material-ui/icons/Add";
 const QuoteList = (props) => {
   const { url } = useRouteMatch();
   const [state, dispatch] = useContext(Context);
+  const [open, setOpen] = useState(false);
+
   const { requests } = props;
   const classes = useStyles();
-  const deleteQuote = (id) => {
+  const deleteRequest = (id) => {
     db.collection("requested")
       .doc(id)
       .delete()
@@ -28,12 +30,13 @@ const QuoteList = (props) => {
         props.getShopRequests();
       });
   };
+
   const nameUpperCase = (name) => {
     return name.charAt(0).toUpperCase() + name.slice(1);
   };
 
   return (
-    <div className="QuoteList" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+    <Container className={`QuoteList ${classes.container}`}>
       {requests
         ? requests.map((request) => {
             return (
@@ -85,12 +88,15 @@ const QuoteList = (props) => {
                     to={`${url}/request/${request.id}`}
                   >
                     <Button>
-                      <MenuIcon />
+                      <MenuIcon style={{color: "#fff"}}/>
                     </Button>
                   </Link>
                   <SimpleDialog
-                    onClose={() => deleteQuote(request.id)}
+                    onClose={() => {}}
+                    deleteRequest={() => deleteRequest(request.id)}
+                    open={open}
                     icon={DeleteIcon}
+                    iconColor = "#fff"
                   />
                 </CardActions>
               </Card>
@@ -100,20 +106,13 @@ const QuoteList = (props) => {
       <Card className={classes.root}>
         <CardActionArea style={{ height: "100%" }}>
           <Link to={`/profile/form/${state.shopId}`}>
-            <div
-              style={{
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <AddIcon style={{ fontSize: 70 }} />
+            <div className={classes.cardAction}>
+              <AddIcon style={{color: '#fff', fontSize: 40}} />
             </div>
           </Link>
         </CardActionArea>
       </Card>
-    </div>
+    </Container>
   );
 };
 
@@ -121,11 +120,21 @@ export default QuoteList;
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    [theme.breakpoints.up("sm")]: {
+      minWidth: "170px",
+    },
     width: "20%",
-    minWidth: "170px",
+    minWidth: "130px",
     marginRight: "1rem",
     marginLeft: "1rem",
     marginBottom: "1.5rem",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
   },
   media: {
     height: 140,
@@ -134,7 +143,19 @@ const useStyles = makeStyles((theme) => ({
     float: "right",
   },
   cardButtons: {
+    background: "rgba(100, 100, 100, 0.5)",
     display: "flex",
     justifyContent: "space-between",
+  },
+  addIocn: {
+    fontSize: 100,
+    color: "#fff",
+  },
+  cardAction: {
+    height: "50px",
+    background: "linear-gradient(90deg, rgba(99,92,235,1) 0%, rgba(63,81,181,1) 29%, rgba(63,81,181,1) 29%);",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));
