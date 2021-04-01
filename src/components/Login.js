@@ -9,7 +9,7 @@ const Login = (props) => {
   const [state, dispatch] = useContext(Context);
   const [errors, setErrors] = useState([]);
   const [forgotPassword, setForgotPassword] = useState(false);
-  
+
   const [formData, setFormData] = useState(false);
   const [createAccount, setCreateAccount] = useState(false);
 
@@ -36,7 +36,7 @@ const Login = (props) => {
     setLoginError(false);
   };
   const signUserIn = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     auth
       .signInWithEmailAndPassword(formData.emailAddress, formData.password)
       .then((userCred) => {
@@ -59,26 +59,26 @@ const Login = (props) => {
       setUser(auth.currentUser);
       setAuth(true);
     }
-  }
+  };
 
   useEffect(() => {
     checkUserAuth();
-  }, [])
+  }, []);
 
-  if (forgotPassword) return <Redirect to="/password_reset" />
+  if (forgotPassword) return <Redirect to="/password_reset" />;
 
   return (
     <div className="Login">
       {createAccount ? (
         <NewAccount setCreateAccount={setCreateAccount} setUser={setUser} />
       ) : (
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div className={classes.createAccountContainer}>
           <div>
-            <h2 style={{ textAlign: "center" }}> Sign In</h2>
+            <h2 className={classes.formHeader}> Sign In</h2>
             <div className={classes.error}>
               {state.loginError ? "Incorrect username or password" : ""}
             </div>
-            <form style={{ display: "flex", flexDirection: "column" }} onSubmit = {(e) => signUserIn(e)}>
+            <form className={classes.form} onSubmit={(e) => signUserIn(e)}>
               <TextField
                 name="emailAddress"
                 ref={emailAddressRef}
@@ -112,10 +112,20 @@ const Login = (props) => {
               >
                 Sign In
               </Button>
-              <Button className={classes.buttonOutline} variant="outlined" color="primary" onClick={() => setCreateAccount(true)}>
+              <Button
+                className={classes.buttonOutline}
+                variant="outlined"
+                color="primary"
+                onClick={() => setCreateAccount(true)}
+              >
                 Create Account
               </Button>
-              <Button className={classes.buttonOutline} variant="outlined" color="primary" onClick={() => setForgotPassword(true)}>
+              <Button
+                className={classes.buttonOutline}
+                variant="outlined"
+                color="primary"
+                onClick={() => setForgotPassword(true)}
+              >
                 Forgot Password
               </Button>
             </form>
@@ -132,6 +142,17 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     marginTop: theme.spacing(1),
     width: "25ch",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  formHeader: {
+    textAlign: "center",
+  },
+  createAccountContainer: {
+    display: "flex",
+    justifyContent: "center",
   },
   button: {
     marginTop: "1rem",
