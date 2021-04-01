@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 const importTag = `
-<div id="root" style="overflow-y:hidden"></div>
+<div id="root"></div>
 <script src="https://estimator-68282.web.app/static/js/2.7749d76c.chunk.js"></script>
 <script src="https://estimator-68282.web.app/static/js/main.6a4cdcc0.chunk.js"></script>
 `;

@@ -9,6 +9,7 @@ import Request from "./components/Request";
 import Settings from "./components/Settings";
 import Splash from "./components/Splash";
 import EstimateForm from "./components/EstimateForm";
+import Footer from "./components/Footer";
 import { db } from "./server/firestore";
 import PrivateRoute from "./components/utils/PrivateRoute";
 import ForgotPassword from "./components/ForgotPassword";
@@ -35,7 +36,7 @@ function App() {
     }
   }, [state.user]);
   return (
-    <div className="App">
+    <div className="App" style={{ height: '100%', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
       <Switch>
         <HeaderRoute exact={true} path="/">
           <Splash />
@@ -62,6 +63,7 @@ function App() {
           <ForgotPassword />
         </HeaderRoute>
       </Switch>
+      <Footer />
     </div>
   );
 }
