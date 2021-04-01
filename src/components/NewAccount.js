@@ -85,7 +85,7 @@ const NewAccount = (props) => {
       });
   };
   return (
-    <Container maxWidth="sm" className="NewAccount">
+    <Container className="NewAccount">
       {accountCreated ? (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <h2 style={{textAlign:"center"}}>
