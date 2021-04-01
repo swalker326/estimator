@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { db } from "../server/firestore";
-import { Container, makeStyles } from "@material-ui/core";
+import { Container, makeStyles, Fab } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -88,7 +88,7 @@ const QuoteList = (props) => {
                     to={`${url}/request/${request.id}`}
                   >
                     <Button>
-                      <MenuIcon style={{color: "#fff"}}/>
+                      <MenuIcon style={{ color: "#fff" }} />
                     </Button>
                   </Link>
                   <SimpleDialog
@@ -96,22 +96,26 @@ const QuoteList = (props) => {
                     deleteRequest={() => deleteRequest(request.id)}
                     open={open}
                     icon={DeleteIcon}
-                    iconColor = "#fff"
+                    iconColor="#fff"
                   />
                 </CardActions>
               </Card>
             );
           })
         : null}
-      <Card className={classes.root}>
-        <CardActionArea style={{ height: "100%" }}>
-          <Link to={`/profile/form/${state.shopId}`}>
-            <div className={classes.cardAction}>
-              <AddIcon style={{color: '#fff', fontSize: 40}} />
-            </div>
-          </Link>
-        </CardActionArea>
-      </Card>
+
+      <Fab
+        className={classes.faButton}
+        size="large"
+        variant="extended"
+        aria-label="add"
+      >
+        <Link to={`/profile/form/${state.shopId}`}>
+          <span class={classes.fabFont}>
+            <AddIcon style={{ fontSize: 40 }} /> Add
+          </span>
+        </Link>
+      </Fab>
     </Container>
   );
 };
@@ -132,9 +136,18 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "space-between",
   },
+  addRequestWrapper: {
+    display: "flex",
+    alignItems: "center",
+  },
+  addRequest: {
+    maxHeight: "50px",
+  },
   container: {
     display: "flex",
     flexWrap: "wrap",
+    position: "relative",
+    paddingBottom: "50px",
   },
   media: {
     height: 140,
@@ -147,13 +160,21 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
   },
-  addIocn: {
-    fontSize: 100,
+  faButton: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
     color: "#fff",
+    background:
+      "linear-gradient(90deg, rgba(99,92,235,1) 0%, rgba(63,81,181,1) 29%, rgba(63,81,181,1) 29%);",
+  },
+  fabFont : {
+    color: '#fff',
+    display: 'flex',
+    alignItems: 'center',
   },
   cardAction: {
     height: "50px",
-    background: "linear-gradient(90deg, rgba(99,92,235,1) 0%, rgba(63,81,181,1) 29%, rgba(63,81,181,1) 29%);",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
