@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import {Context} from '../state/store';
+import { Context } from "../state/store";
+import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SelectedImage from "./SelectedImage";
 import Avatar from "@material-ui/core/Avatar";
@@ -11,7 +12,7 @@ import { Link } from "react-router-dom";
 
 //styles
 import "react-morphing-modal/dist/ReactMorphingModal.css";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import CancelRoundedIcon from "@material-ui/icons/CancelRounded";
 
 //Local Impots
 const OpenModal = (props) => {
@@ -19,10 +20,18 @@ const OpenModal = (props) => {
   const { openModal, setSelectedImage, selectedImage } = props;
   function handleClick() {
     // do some complicated stuff
-    setSelectedImage(selectedImage)
+    setSelectedImage(selectedImage);
     openModal(imgRef);
   }
-  return <img style={{boxShadow: "5px 3px 5px 0px #898989"}} ref={imgRef} onClick={handleClick} {...props} alt="damage" />;
+  return (
+    <img
+      style={{ boxShadow: "5px 3px 5px 0px #898989" }}
+      ref={imgRef}
+      onClick={handleClick}
+      {...props}
+      alt="damage"
+    />
+  );
 };
 
 const Request = (props) => {
@@ -30,7 +39,7 @@ const Request = (props) => {
   const requestId = useParams().request_id;
   const [requestData, setRequestData] = useState(false);
   const { modalProps, open } = useModal({
-    background: 'rgba(0,0,0,0.7)',
+    background: "rgba(0,0,0,0.7)",
   });
 
   const getRequestData = () => {
@@ -48,31 +57,35 @@ const Request = (props) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <Container className={classes.root}>
       {state.request}
-      <div className={classes.backIconContainer} >
-      <Link to={`/profile/${state.shopId}`}>
-        <ArrowBackIcon className = {classes.arrowIcon} onClick={() => dispatch({type: 'SET_REQUEST', currentRequest: '' })} />
-      </Link>
+      <div className={classes.closeIconContainer}>
+        <Link to={`/profile/${state.shopId}`}>
+          <CancelRoundedIcon
+            className={classes.closeIcon}
+            onClick={() =>
+              dispatch({ type: "SET_REQUEST", currentRequest: "" })
+            }
+          />
+        </Link>
       </div>
       <Modal {...modalProps} padding={false}>
         <SelectedImage
           setSelectedImage={setSelectedImage}
           selectedImage={selectedImage}
-          closeButton = {false}
+          closeButton={false}
         />
       </Modal>
-      <div>
+      <Container class={classes.requestContainer}>
         <div className={classes.contactContainer}>
           <div className={classes.avatarContainer}>
-            <Avatar className={classes.purple}>
-            {requestData ?
-              (
+            <Avatar className={classes.requestAvatar}>
+              {requestData ? (
                 <span>
                   {requestData.first_name.charAt(0).toUpperCase()}
                   {requestData.last_name.charAt(0).toUpperCase()}
-                </span> 
-              ) : null }
+                </span>
+              ) : null}
             </Avatar>
           </div>
           <div className={classes.contactDetailsWrapper}>
@@ -85,9 +98,17 @@ const Request = (props) => {
             <div>
               <h3>Vehicle Details</h3>
               <h5 className={classes.contactDetails}>
-                {requestData.carYear} {requestData.carMake}
+                <span className={classes.carDataHeader}>Year:</span>{" "}
+                {requestData.carYear}
               </h5>
-              <h5 className={classes.contactDetails}>{requestData.carModel}</h5>
+              <h5 className={classes.contactDetails}>
+                <span className={classes.carDataHeader}>Make:</span>{" "}
+                {requestData.carMake}
+              </h5>
+              <h5 className={classes.contactDetails}>
+                <span className={classes.carDataHeader}>Model:</span>{" "}
+                {requestData.carModel}
+              </h5>
             </div>
           </div>
         </div>
@@ -95,77 +116,95 @@ const Request = (props) => {
           {requestData
             ? requestData.images.map((image) => (
                 <OpenModal
-                  // onClick={() => setSelectedImage(image)}
                   setSelectedImage={setSelectedImage}
-                  selectedImage ={image}
+                  selectedImage={image}
                   openModal={open}
                   className={classes.image}
                   src={image}
-                  alt="damage_photo"
+                  alt="damage photo"
                 />
               ))
             : null}
         </div>
-      </div>
-    </div>
+      </Container>
+    </Container>
   );
 };
 
 export default Request;
 
 const useStyles = makeStyles((theme) => ({
-  arrowIcon: {
+  closeIcon: {
     cursor: "pointer",
-    paddingTop: "3rem",
+    padding: "10px",
+    marginTop: "3rem",
+    marginBottom: "3rem",
+    fontSize: "60px",
+    color: "rgba(0,0,0,0.3)",
+  },
+  carDataHeader: {
+    color: "grey",
+    fontWeight: 600,
   },
   avatarContainer: {
     display: "flex",
-    paddingTop: "1rem",
-    paddingLeft: "2rem",
-  },
-  backIconContainer: {
-    display: "flex",
     alignItems: "center",
-    paddingLeft: "2rem",
+    justifyContent: "center",
+  },
+  closeIconContainer: {
     fontWeight: "700",
+    position: "absolute",
+    top: "3rem",
+    right: "5%",
   },
   imageWrapper: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     flexWrap: "wrap",
-    paddingTop: "2rem",
+    marginLeft: "1rem",
   },
   image: {
-    maxWidth: "40%",
+    maxWidth: "100%",
+    [theme.breakpoints.up("sm")]: {
+      maxWidth: "48%",
+    },
     [theme.breakpoints.up("md")]: {
-      maxWidth: "30%",
+      maxWidth: "31%",
     },
     [theme.breakpoints.up("lg")]: {
       maxWidth: "20%",
     },
     borderRadius: "6px",
     objectFit: "cover",
-    marginLeft: "1rem",
-    marginRight: "1rem",
+    marginLeft: "1%",
+    marginRight: "1%",
     marginBottom: "1rem",
+  },
+  requestContainer: {
+    display: "flex",
+    paddingTop: "5rem",
   },
   contactContainer: {
     display: "flex",
+    paddingTop: "2rem",
+    paddingRight: "2rem",
+    flexDirection: "column",
+    backgroundColor: "#eaeaea",
+    borderRadius: "6px",
   },
   contactDetails: {
     textAlign: "left",
     marginTop: "8px",
     marginBottom: "8px",
+    fontWeight: 600,
   },
   contactDetailsWrapper: {
     paddingLeft: "1rem",
   },
-  orange: {
-    color: theme.palette.getContrastText(deepOrange[500]),
-    backgroundColor: deepOrange[500],
-  },
-  purple: {
-    color: theme.palette.getContrastText(deepPurple[500]),
+  requestAvatar: {
+    fontSize: "36px",
+    width: "100px",
+    height: "100px",
     backgroundColor: deepPurple[500],
   },
 }));
