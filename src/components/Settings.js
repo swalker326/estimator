@@ -51,9 +51,12 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "200px",
     position: "relative",
     overflow: "hidden",
+    width: "100vw",
+    marginLeft: "50%",
+    transform: "translateX(-50%)",
   },
   bannerImage: {
-    objectFit: "contain",
+    objectFit: "cover",
     flexShrink: 0,
   },
   editIconContainer: {

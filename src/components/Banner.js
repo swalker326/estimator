@@ -14,11 +14,14 @@ const Banner = (props) => {
             height: "200px",
             display: "flex",
             justifyContent: "center",
+            width: "100vw",
+            marginLeft: "50%",
+            transform: "translateX(-50%)",
           }}
         >
           <img
             alt=""
-            style={{ objectFit: "contain", width: "100%" }}
+            style={{ objectFit: "cover", width: "100%" }}
             src={banner}
           ></img>
         </div>
