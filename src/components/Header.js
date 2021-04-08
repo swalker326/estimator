@@ -87,7 +87,7 @@ const Header = (props) => {
               <p>Notifications</p>
             </MenuItem>
             <MenuItem>
-              <Link to={`/profile/settings/${state.shopId}`}>
+              <Link to={`/profile/settings/${state.shopId}`} onClick={handleMobileMenuClose}>
                 <div style={{ display: "flex" }}>
                   <IconButton aria-label="log current user out" color="inherit">
                     <SettingsIcon />
