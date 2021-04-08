@@ -1,71 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../state/store";
 import { Button } from "@material-ui/core";
-import { Link, useRouteMatch } from "react-router-dom";
-import { TextField, makeStyles } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { Container, TextField, makeStyles } from "@material-ui/core";
 import { useFilePicker, utils } from "react-sage";
 import EditIcon from "@material-ui/icons/Edit";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import { ImageUpload } from "./ImageUpload";
 import { db } from "../server/firestore";
-
-const useStyles = makeStyles((theme) => ({
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    padding: "5rem",
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    marginTop: theme.spacing(1),
-  },
-  button: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    marginTop: theme.spacing(1),
-    width: "10rem",
-  },
-  changeBannerButton: {
-    position: "absolute",
-    top: "40%",
-    left: "50%",
-  },
-  editButton: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    marginTop: theme.spacing(1),
-    width: "10rem",
-  },
-  buttonGroup: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  bannerContainer: {
-    display: "flex",
-    flexDirection: "column",
-    marginBottom: theme.spacing(3),
-  },
-  bannerImageContainer: {
-    display: "flex",
-    justifyContent: "center",
-    maxHeight: "200px",
-    position: "relative",
-    overflow: "hidden",
-    width: "100vw",
-    marginLeft: "50%",
-    transform: "translateX(-50%)",
-  },
-  bannerImage: {
-    objectFit: "cover",
-    flexShrink: 0,
-  },
-  editIconContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    cursor: "pointer",
-  },
-}));
 
 const Settings = (props) => {
   const classes = useStyles();
@@ -127,25 +69,22 @@ const Settings = (props) => {
     }
   }, [files]);
   return (
-    <div className="Settings">
+    <Container className="Settings">
       <div>
         <HiddenFileInput accept=".jpg, .jpeg, .png" multiple={false} />
       </div>
       <div style={{ display: "none" }}>Shop ID: {state.shopData.shop_id}</div>
       <form className={classes.form} onSubmit={(e) => updateUserDetails(e)}>
-        <div className={classes.editIconContainer}>
-          <Button
-            className={classes.editButton}
-            onClick={() => setEditing(!editing)}
-            variant="contained"
-            color="secondary"
-            endIcon={<EditIcon />}
-          >
-            {editing ? "Editing..." : "Edit"}
-          </Button>
-        </div>
-        <div className={classes.bannerContainer}>
-          <h3>Banner</h3>
+        <Container maxWidth="md" className={classes.bannerContainer}>
+          <div className={classes.bannerHeaderContainer}>
+            <h3>Banner</h3>
+            <div className={classes.editIconContainer}>
+              <EditIcon
+                className={classes.editIcon}
+                onClick={() => setEditing(!editing)}
+              />
+            </div>
+          </div>
           <div className={classes.bannerImageContainer}>
             <img
               className={classes.bannerImage}
@@ -166,7 +105,7 @@ const Settings = (props) => {
               </Button>
             ) : null}
           </div>
-        </div>
+        </Container>
         <TextField
           disabled={!editing}
           name="shop_name"
@@ -201,13 +140,17 @@ const Settings = (props) => {
           onChange={handleInputChange}
           className={classes.textField}
           value={
-            formData.shop_website ? formData.shop_website : state.shopData.shop_website
+            formData.shop_website
+              ? formData.shop_website
+              : state.shopData.shop_website
           }
           variant="outlined"
         ></TextField>
         <div className={classes.buttonGroup}>
           <Button variant="outlined" className={classes.button}>
-            <Link target="_blank" to={`/profile/form/${state.shopId}`}>Preview Form</Link>
+            <Link target="_blank" to={`/profile/form/${state.shopId}`}>
+              Preview Form
+            </Link>
           </Button>
           {editing ? (
             <Button
@@ -222,8 +165,75 @@ const Settings = (props) => {
           ) : null}
         </div>
       </form>
-    </div>
+    </Container>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  form: {
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    marginTop: theme.spacing(1),
+  },
+  button: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    marginTop: theme.spacing(1),
+    width: "10rem",
+  },
+  changeBannerButton: {
+    position: "absolute",
+    top: "40%",
+    left: "50%",
+  },
+  editButton: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    marginTop: theme.spacing(1),
+    width: "10rem",
+  },
+  buttonGroup: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  bannerContainer: {
+    display: "flex",
+    position: "relative",
+    flexDirection: "column",
+    marginBottom: theme.spacing(3),
+  },
+  bannerImageContainer: {
+    display: "flex",
+    justifyContent: "center",
+    maxHeight: "200px",
+    overflow: "hidden",
+    width: "100vw",
+    marginLeft: "50%",
+    transform: "translateX(-50%)",
+  },
+  bannerImage: {
+    objectFit: "cover",
+    flexShrink: 0,
+  },
+  bannerHeaderContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  editIcon: {
+    color: "#313131",
+  },
+  editIconContainer: {
+    display: "flex",
+    alignItems: "end",
+    justifyContent: "flex-end",
+    cursor: "pointer",
+  },
+}));
 
 export default Settings;
