@@ -41,16 +41,16 @@ const QuoteList = (props) => {
         ? requests.map((request) => {
             return (
               <Card className={classes.root} key={request.id}>
-                <Link
-                  onClick={() =>
-                    dispatch({
-                      type: "SET_REQUEST",
-                      currentRequest: request.id,
-                    })
-                  }
-                  to={`${url}/request/${request.id}`}
-                >
-                  <CardActionArea>
+                <CardActionArea className={classes.actionArea}>
+                  <Link
+                    onClick={() =>
+                      dispatch({
+                        type: "SET_REQUEST",
+                        currentRequest: request.id,
+                      })
+                    }
+                    to={`${url}/request/${request.id}`}
+                  >
                     <CardMedia
                       className={classes.media}
                       image={request.images[0]}
@@ -75,8 +75,8 @@ const QuoteList = (props) => {
                         {request.carMake} - {request.carModel}
                       </Typography>
                     </CardContent>
-                  </CardActionArea>
-                </Link>
+                  </Link>
+                </CardActionArea>
                 <CardActions className={classes.cardButtons}>
                   <Link
                     onClick={() =>
@@ -136,6 +136,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "space-between",
   },
+  actionArea: {
+    height: "100%",
+    display: "flex",
+    width: "100%",
+  },
   addRequestWrapper: {
     display: "flex",
     alignItems: "center",
@@ -150,7 +155,9 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "50px",
   },
   media: {
-    height: 140,
+    height: 0,
+    width: "200px",
+    paddingBottom: "100%",
   },
   deleteButtonContainer: {
     float: "right",
@@ -168,10 +175,10 @@ const useStyles = makeStyles((theme) => ({
     background:
       "linear-gradient(90deg, rgba(99,92,235,1) 0%, rgba(63,81,181,1) 29%, rgba(63,81,181,1) 29%);",
   },
-  fabFont : {
-    color: '#fff',
-    display: 'flex',
-    alignItems: 'center',
+  fabFont: {
+    color: "#fff",
+    display: "flex",
+    alignItems: "center",
   },
   cardAction: {
     height: "50px",
