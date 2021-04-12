@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { Container, TextField, makeStyles } from "@material-ui/core";
 import { useFilePicker, utils } from "react-sage";
 import EditIcon from "@material-ui/icons/Edit";
-import InputAdornment from "@material-ui/core/InputAdornment";
 import { ImageUpload } from "./ImageUpload";
 import { db } from "../server/firestore";
 
@@ -189,7 +188,6 @@ const useStyles = makeStyles((theme) => ({
   changeBannerButton: {
     position: "absolute",
     top: "40%",
-    left: "50%",
   },
   editButton: {
     marginLeft: theme.spacing(1),
@@ -218,6 +216,7 @@ const useStyles = makeStyles((theme) => ({
   },
   bannerImage: {
     objectFit: "cover",
+    objectPosition: "center",
     flexShrink: 0,
   },
   bannerHeaderContainer: {
