@@ -124,13 +124,12 @@ export default QuoteList;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.down("md")]: {
       minWidth: "170px",
     },
-    width: "20%",
+    width: "23%",
     minWidth: "130px",
     marginRight: "1rem",
-    marginLeft: "1rem",
     marginBottom: "1.5rem",
     display: "flex",
     flexDirection: "column",
@@ -150,6 +149,7 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     display: "flex",
+    justifyContent: "center",
     flexWrap: "wrap",
     position: "relative",
     paddingBottom: "50px",
