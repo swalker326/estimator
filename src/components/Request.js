@@ -82,24 +82,25 @@ const Request = (props) => {
       </Modal>
       <Container class={classes.requestContainer}>
         <div className={classes.contactContainer}>
-          <div className={classes.contactDetailsWrapper}>
-            <div>
-              <h3 className={classes.contactDetails}>
-                {requestData.first_name} {requestData.last_name}
+          <div className={classes.contactDetailsContainer}>
+            <div className={` ${classes.contactDetails} customer`}>
+            <h2>Contact Details</h2>
+              <h3 className={classes.contactDetail}>
+              {requestData.first_name} {requestData.last_name}
               </h3>
-              <h5 className={classes.contactDetails}>{requestData.email}</h5>
+              <h5 className={classes.contactDetail}><span className={classes.carDataHeader}>Email:</span>{" "}{requestData.email}</h5>
             </div>
-            <div>
-              <h3>Vehicle Details</h3>
-              <h5 className={classes.contactDetails}>
+            <div className={` ${classes.contactDetails} ${classes.vehicle}`}>
+              <h2>Vehicle Details</h2>
+              <h5 className={classes.contactDetail}>
                 <span className={classes.carDataHeader}>Year:</span>{" "}
                 {requestData.carYear}
               </h5>
-              <h5 className={classes.contactDetails}>
+              <h5 className={classes.contactDetail}>
                 <span className={classes.carDataHeader}>Make:</span>{" "}
                 {requestData.carMake}
               </h5>
-              <h5 className={classes.contactDetails}>
+              <h5 className={classes.contactDetail}>
                 <span className={classes.carDataHeader}>Model:</span>{" "}
                 {requestData.carModel}
               </h5>
@@ -142,7 +143,6 @@ export default Request;
 const useStyles = makeStyles((theme) => ({
   closeIcon: {
     cursor: "pointer",
-    padding: "10px",
     marginTop: "3rem",
     marginBottom: "3rem",
     fontSize: "60px",
@@ -224,16 +224,24 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "2rem",
     paddingRight: "2rem",
     borderRadius: "6px",
+    backgroundColor: "rgba(0,0,0,0.3)"
   },
   contactDetails: {
+    marginLeft: "50px",
+    marginBottom: "20px",
+  },
+  'vehicle': {
+    marginLeft: "70px",
+  },
+  contactDetail: {
     textAlign: "left",
     marginTop: "8px",
     marginBottom: "8px",
     fontWeight: 600,
   },
-  contactDetailsWrapper: {
-    margin: "auto",
+  contactDetailsContainer: {
     display: "flex",
+    justifyContent: "flex-start",
   },
   requestAvatar: {
     fontSize: "36px",
