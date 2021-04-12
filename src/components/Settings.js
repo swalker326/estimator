@@ -104,65 +104,69 @@ const Settings = (props) => {
               </Button>
             ) : null}
           </div>
-        </Container>
-        <TextField
-          disabled={!editing}
-          name="shop_name"
-          label="Shop Name"
-          id="outlined-basic"
-          onChange={handleInputChange}
-          className={classes.textField}
-          value={
-            formData.shop_name ? formData.shop_name : state.shopData.shop_name
-          }
-          variant="outlined"
-        ></TextField>
-        <TextField
-          disabled={!editing}
-          name="shop_email"
-          onChange={handleInputChange}
-          label="Shop Email"
-          id="outlined-basic"
-          className={classes.textField}
-          value={
-            formData.shop_email
-              ? formData.shop_email
-              : state.shopData.shop_email
-          }
-          variant="outlined"
-        ></TextField>
-        <TextField
-          disabled={!editing}
-          name="shop_website"
-          label="Shop Website"
-          id="outlined-basic"
-          onChange={handleInputChange}
-          className={classes.textField}
-          value={
-            formData.shop_website
-              ? formData.shop_website
-              : state.shopData.shop_website
-          }
-          variant="outlined"
-        ></TextField>
-        <div className={classes.buttonGroup}>
-          <Button variant="outlined" className={classes.button}>
-            <Link target="_blank" to={`/profile/form/${state.shopId}`}>
-              Preview Form
-            </Link>
-          </Button>
-          {editing ? (
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              type="submit"
-              onClick={handleSettingsSave}
-            >
-              Save
+          <div className={classes.textFields}>
+            <TextField
+              disabled={!editing}
+              name="shop_name"
+              label="Shop Name"
+              id="outlined-basic"
+              onChange={handleInputChange}
+              className={classes.textField}
+              value={
+                formData.shop_name
+                  ? formData.shop_name
+                  : state.shopData.shop_name
+              }
+              variant="outlined"
+            ></TextField>
+            <TextField
+              disabled={!editing}
+              name="shop_email"
+              onChange={handleInputChange}
+              label="Shop Email"
+              id="outlined-basic"
+              className={classes.textField}
+              value={
+                formData.shop_email
+                  ? formData.shop_email
+                  : state.shopData.shop_email
+              }
+              variant="outlined"
+            ></TextField>
+            <TextField
+              disabled={!editing}
+              name="shop_website"
+              label="Shop Website"
+              id="outlined-basic"
+              onChange={handleInputChange}
+              className={classes.textField}
+              value={
+                formData.shop_website
+                  ? formData.shop_website
+                  : state.shopData.shop_website
+              }
+              variant="outlined"
+            ></TextField>
+          </div>
+          <div className={classes.buttonGroup}>
+            <Button variant="outlined" className={classes.button}>
+              <Link target="_blank" to={`/profile/form/${state.shopId}`}>
+                Preview Form
+              </Link>
             </Button>
-          ) : null}
-        </div>
+            {editing ? (
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                type="submit"
+                onClick={handleSettingsSave}
+              >
+                Save
+              </Button>
+            ) : null}
+          </div>
+        </Container>
       </form>
     </Container>
   );
@@ -171,6 +175,10 @@ const Settings = (props) => {
 const useStyles = makeStyles((theme) => ({
   form: {
     position: "relative",
+    display: "flex",
+    flexDirection: "column",
+  },
+  textFields: {
     display: "flex",
     flexDirection: "column",
   },
