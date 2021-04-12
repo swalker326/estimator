@@ -4,6 +4,12 @@
 .MuiGridListTile-tile {
   border-radius: 1rem;
 }
+/* Move Request selected image close icon to left side */
+.RMM__close-button {
+  left: 20px !important;
+  top: 90px !important;
+  right: unset;
+}
 span.MuiBadge-badge {
   z-index: 0;
 }

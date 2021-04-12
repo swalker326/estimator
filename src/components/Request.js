@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { Context } from "../state/store";
 import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { deepPurple } from "@material-ui/core/colors";
 import SelectedImage from "./SelectedImage";
-import Avatar from "@material-ui/core/Avatar";
-import { deepOrange, deepPurple } from "@material-ui/core/colors";
 import { useParams } from "react-router-dom";
 import { db } from "../server/firestore";
 import { useModal, Modal } from "react-morphing-modal";
@@ -38,6 +37,8 @@ const Request = (props) => {
   const [state, dispatch] = useContext(Context);
   const requestId = useParams().request_id;
   const [requestData, setRequestData] = useState(false);
+  const [primaryImage, setPrimaryImage] = useState(null);
+
   const { modalProps, open } = useModal({
     background: "rgba(0,0,0,0.7)",
   });
@@ -46,7 +47,10 @@ const Request = (props) => {
     db.collection("requested")
       .doc(requestId)
       .get()
-      .then((doc) => setRequestData(doc.data()));
+      .then((doc) => {
+        setRequestData(doc.data());
+        setPrimaryImage(doc.data().images[0]);
+      });
   };
   useEffect(() => {
     getRequestData();
@@ -57,7 +61,7 @@ const Request = (props) => {
   const classes = useStyles();
 
   return (
-    <Container className={classes.root}>
+    <Container className={`Request ${classes.root}`}>
       {state.request}
       <div className={classes.closeIconContainer}>
         <Link to={`/profile/${state.shopId}`}>
@@ -78,16 +82,6 @@ const Request = (props) => {
       </Modal>
       <Container class={classes.requestContainer}>
         <div className={classes.contactContainer}>
-          <div className={classes.avatarContainer}>
-            <Avatar className={classes.requestAvatar}>
-              {requestData ? (
-                <span>
-                  {requestData.first_name.charAt(0).toUpperCase()}
-                  {requestData.last_name.charAt(0).toUpperCase()}
-                </span>
-              ) : null}
-            </Avatar>
-          </div>
           <div className={classes.contactDetailsWrapper}>
             <div>
               <h3 className={classes.contactDetails}>
@@ -113,18 +107,30 @@ const Request = (props) => {
           </div>
         </div>
         <div className={classes.imageWrapper}>
-          {requestData
-            ? requestData.images.map((image) => (
-                <OpenModal
-                  setSelectedImage={setSelectedImage}
-                  selectedImage={image}
-                  openModal={open}
-                  className={classes.image}
-                  src={image}
-                  alt="damage photo"
-                />
-              ))
-            : null}
+          <div className={classes.primaryImageContainer}>
+            <img
+              className={classes.primaryImage}
+              src={primaryImage}
+              alt="primary damage"
+            />
+          </div>
+          <div className={classes.thumbnailContainer}>
+            {requestData
+              ? requestData.images.map((image, index) =>
+                  index !== 0 ? (
+                    <OpenModal
+                      setSelectedImage={setSelectedImage}
+                      selectedImage={image}
+                      openModal={open}
+                      className={classes.image}
+                      position={index}
+                      src={image}
+                      alt="damage"
+                    />
+                  ) : null
+                )
+              : null}
+          </div>
         </div>
       </Container>
     </Container>
@@ -159,37 +165,64 @@ const useStyles = makeStyles((theme) => ({
   },
   imageWrapper: {
     display: "flex",
-    justifyContent: "flex-start",
+    paddingTop: "12px",
+    flexDirection: "column",
+    [theme.breakpoints.up("md")]: {
+      flexDirection: "row",
+    },
+  },
+  primaryImageContainer: {
+    maxWidth: "100%",
+    height: "500px",
+    [theme.breakpoints.up("md")]: {
+      maxWidth: "30%",
+    },
+  },
+  primaryImage: {
+    width: "100%",
+    objectFit: "cover",
+    height: "100%",
+    borderRadius: "6px",
+    marginBottom: "12px",
+  },
+  thumbnailContainer: {
+    display: "flex",
+    height: "100%",
     flexWrap: "wrap",
-    marginLeft: "1rem",
+    justifyContent: "space-evenly",
+    maxWidth: "100%",
+    paddingTop: "12px",
+    [theme.breakpoints.up("md")]: {
+      maxWidth: "60%",
+      justifyContent: "flex-start",
+      paddingTop: 0,
+    },
   },
   image: {
-    maxWidth: "100%",
+    width: "100%",
+    borderRadius: "6px",
+    objectFit: "cover",
+    marginLeft: "6px",
+    marginRight: "6px",
+    marginBottom: "8px",
+    marginTop: "12px",
     [theme.breakpoints.up("sm")]: {
-      maxWidth: "48%",
+      maxWidth: "45%",
+      marginTop: 0,
     },
     [theme.breakpoints.up("md")]: {
       maxWidth: "31%",
     },
-    [theme.breakpoints.up("lg")]: {
-      maxWidth: "20%",
-    },
-    borderRadius: "6px",
-    objectFit: "cover",
-    marginLeft: "1%",
-    marginRight: "1%",
-    marginBottom: "1rem",
   },
   requestContainer: {
     display: "flex",
+    flexDirection: "column",
     paddingTop: "5rem",
   },
   contactContainer: {
     display: "flex",
     paddingTop: "2rem",
     paddingRight: "2rem",
-    flexDirection: "column",
-    backgroundColor: "#eaeaea",
     borderRadius: "6px",
   },
   contactDetails: {
@@ -199,7 +232,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
   },
   contactDetailsWrapper: {
-    paddingLeft: "1rem",
+    margin: "auto",
+    display: "flex",
   },
   requestAvatar: {
     fontSize: "36px",
