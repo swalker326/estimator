@@ -40,7 +40,6 @@ const Login = (props) => {
     auth
       .signInWithEmailAndPassword(formData.emailAddress, formData.password)
       .then((userCred) => {
-        console.log("userCred.user", userCred.user); // eslint-disable-line
         setUser(userCred.user);
         setAuth(true);
       })
@@ -54,15 +53,19 @@ const Login = (props) => {
         console.error("errorMessage", errorMessage); // eslint-disable-line
       });
   };
-  const checkUserAuth = () => {
-    if (auth.currentUser) {
-      setUser(auth.currentUser);
-      setAuth(true);
-    }
-  };
 
   useEffect(() => {
-    checkUserAuth();
+    auth.onAuthStateChanged( user => {
+        if (user) {
+            console.log('AUTH')
+            setUser(user)
+            setAuth(true);
+        } else {
+            console.log('NO AUTH')
+            setAuth(false);
+        }
+    })
+
   }, []);
 
   if (forgotPassword) return <Redirect to="/password_reset" />;
