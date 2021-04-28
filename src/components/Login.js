@@ -57,11 +57,9 @@ const Login = (props) => {
   useEffect(() => {
     auth.onAuthStateChanged( user => {
         if (user) {
-            console.log('AUTH')
             setUser(user)
             setAuth(true);
         } else {
-            console.log('NO AUTH')
             setAuth(false);
         }
     })
