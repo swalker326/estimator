@@ -5,18 +5,10 @@ import Button from "@material-ui/core/Button";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 
-import { blue } from "@material-ui/core/colors";
-
-
-
-function SimpleDialog(props) {
+function DeleteDialog(props) {
   const [deleteRequest, setDeleteRequest] = useState(false);
   const classes = useStyles();
   const { onClose, open, deleteCurrentRequest, setOpen } = props;
-
-  const handleClose = () => {
-    
-  };
 
   useEffect(() => {
     if (deleteRequest) {
@@ -25,8 +17,8 @@ function SimpleDialog(props) {
     } else {
       setOpen(false);
     }
-    setOpen(false)
-  },[deleteRequest])
+    setOpen(false);
+  }, [deleteRequest]);
 
   return (
     <Dialog
@@ -34,14 +26,22 @@ function SimpleDialog(props) {
       aria-labelledby="simple-dialog-title"
       open={open}
     >
-      <DialogTitle id="simple-dialog-title">Confirm Request</DialogTitle>
+      <DialogTitle id="simple-dialog-title">Confirm Delete</DialogTitle>
       <div className={classes.root}>
-        <div>Are you sure you would like to delete the request</div>
+        <div>Are you sure you would like to delete this request?</div>
         <div className={classes.buttonGroup}>
-          <Button variant="outlined" onClick={() => setOpen(false)} color="primary">
+          <Button
+            variant="outlined"
+            onClick={() => setOpen(false)}
+            color="primary"
+          >
             No Go Back
           </Button>
-          <Button variant="contained" onClick={() => setDeleteRequest(true)} color="secondary">
+          <Button
+            variant="contained"
+            onClick={() => setDeleteRequest(true)}
+            color="secondary"
+          >
             Yes Delete
           </Button>
         </div>
@@ -50,13 +50,13 @@ function SimpleDialog(props) {
   );
 }
 
-SimpleDialog.propTypes = {
+DeleteDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
 };
 
-export default function SimpleDialogDemo(props) {
+export default function DeleteDialogComponent(props) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,17 +69,20 @@ export default function SimpleDialogDemo(props) {
 
   return (
     <div>
-      <Button onClick={handleClickOpen}>{<props.icon style={{color: `${props.iconColor}`}}/>}</Button>
-      <SimpleDialog open={open} deleteCurrentRequest={props.deleteRequest} setOpen={setOpen} onClose={handleClose} setOpen={setOpen}  />
+      <Button onClick={handleClickOpen}>
+        {<props.icon style={{ color: `${props.iconColor}` }} />}
+      </Button>
+      <DeleteDialog
+        open={open}
+        deleteCurrentRequest={props.deleteRequest}
+        setOpen={setOpen}
+        onClose={handleClose}
+      />
     </div>
   );
 }
 
 const useStyles = makeStyles({
-  avatar: {
-    backgroundColor: blue[100],
-    color: blue[600],
-  },
   root: {
     marginRight: "2rem",
     marginBottom: "2rem",

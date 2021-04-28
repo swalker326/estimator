@@ -12,7 +12,7 @@ import { Context } from "../state/store";
 import { Link, useRouteMatch } from "react-router-dom";
 import DeleteIcon from "@material-ui/icons/Delete";
 import MenuIcon from "@material-ui/icons/Menu";
-import SimpleDialog from "./utils/SimpleDialog";
+import DeleteDialog from "./utils/DeleteDialog";
 import AddIcon from "@material-ui/icons/Add";
 
 const QuoteList = (props) => {
@@ -91,7 +91,7 @@ const QuoteList = (props) => {
                       <MenuIcon style={{ color: "#fff" }} />
                     </Button>
                   </Link>
-                  <SimpleDialog
+                  <DeleteDialog
                     onClose={() => {}}
                     deleteRequest={() => deleteRequest(request.id)}
                     open={open}
