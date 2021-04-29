@@ -18,7 +18,6 @@ const OpenModal = (props) => {
   const imgRef = useRef(null);
   const { openModal, setSelectedImage, selectedImage } = props;
   function handleClick() {
-    // do some complicated stuff
     setSelectedImage(selectedImage);
     openModal(imgRef);
   }
@@ -224,7 +223,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "2rem",
     paddingRight: "2rem",
     borderRadius: "6px",
-    backgroundColor: "rgba(0,0,0,0.3)"
+    backgroundColor: "rgba(0,0,0,0.1)"
   },
   contactDetails: {
     marginLeft: "50px",

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "../state/store";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -15,8 +15,10 @@ import ExitToApp from "@material-ui/icons/ExitToApp";
 import { Link } from "react-router-dom";
 import logo from "../assets/qhoto_font_logo.png";
 import { auth } from "../server/firestore";
+import LogoutDialog from "./utils/LogoutDialog";
 
 const Header = (props) => {
+  const [open, setOpen] = useState(false);
   const [state, dispatch] = useContext(Context);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -101,13 +103,15 @@ const Header = (props) => {
             </MenuItem>
           </div>
         ) : null}
-        <MenuItem onClick={state.auth ? logUserOut : () => null}>
-          <div style={{ display: "flex" }}>
-            <IconButton aria-label="account of current user" color="inherit">
-              <ExitToApp />
-            </IconButton>
-            <p>Logout</p>
-          </div>
+        <MenuItem>
+          <LogoutDialog
+            onClose={() => {}}
+            logout={logUserOut}
+            open={open}
+            icon={ExitToApp}
+            iconColor="#000"
+            copy="Logout"
+          />
         </MenuItem>
       </Menu>
     </div>
@@ -136,17 +140,20 @@ const Header = (props) => {
               </Badge>
             </IconButton>
             <IconButton aria-label="account of current user" color="inherit">
-              <Link class={classes.link} to={`/profile/settings/${state.shopId}`}>
+              <Link
+                class={classes.link}
+                to={`/profile/settings/${state.shopId}`}
+              >
                 <SettingsIcon style={{ color: "white" }} />
               </Link>
             </IconButton>
-            <IconButton
-              onClick={state.auth ? logUserOut : () => null}
-              aria-label="account of current user"
-              color="inherit"
-            >
-              <ExitToApp style={{ color: "white" }} />
-            </IconButton>
+            <LogoutDialog
+              onClose={() => {}}
+              logout={logUserOut}
+              open={open}
+              icon={ExitToApp}
+              iconColor="#fff"
+            />
           </div>
           <div className={classes.sectionMobile}>
             <IconButton

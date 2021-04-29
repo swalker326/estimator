@@ -35,7 +35,7 @@ function DeleteDialog(props) {
             onClick={() => setOpen(false)}
             color="primary"
           >
-            No Go Back
+            Go Back
           </Button>
           <Button
             variant="contained"
